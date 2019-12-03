@@ -22,7 +22,6 @@ public class Constants {
     public static final int RESP_STATUS_BADREQUEST = 400;
 
 
-
     //微信公众号APPID
     public static final String WEXING_STATUS_APPID="wxb1724deaa7673ef5";
 
@@ -98,7 +97,10 @@ public class Constants {
     /**用户注册分布式锁路径***/
     public static final String USER_REGISTER_DISTRIBUTE_LOCK_PATH = "/user_reg";
 
-
+    public static final String url = "https://api.weixin.qq.com/sns/jscode2session";
+    public static final String appId ="wxa49b35cbb6b4708e" ;
+    public static final String appSecret ="06b176d0d2cd0a791ef5a4b5aaaf121f";
+    public static final String grant_type ="authorization_code";
 
 
     public static final String MDSMS_ACCOUNT_SID = "e781734be145420bb4c23fe2b3c89649";
