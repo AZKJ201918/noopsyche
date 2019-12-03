@@ -98,8 +98,8 @@ public class Constants {
     public static final String USER_REGISTER_DISTRIBUTE_LOCK_PATH = "/user_reg";
 
     public static final String url = "https://api.weixin.qq.com/sns/jscode2session";
-    public static final String appId ="wxa49b35cbb6b4708e" ;
-    public static final String appSecret ="06b176d0d2cd0a791ef5a4b5aaaf121f";
+    public static final String appId ="wxf74c67f67043acf4";
+    public static final String appSecret ="100d3ea626d739417d3289c9c112e06e";
     public static final String grant_type ="authorization_code";
 
 
