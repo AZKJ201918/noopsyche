@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.azkj.noopsyche.dao.DatumMapper" >
+  <resultMap id="BaseResultMap" type="com.azkj.noopsyche.entity.Datum" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="licenseurl" property="licenseurl" jdbcType="VARCHAR" />
+    <result column="identityjusturl" property="identityjusturl" jdbcType="VARCHAR" />
+    <result column="identitycontraryurl" property="identitycontraryurl" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="mailbox" property="mailbox" jdbcType="VARCHAR" />
+    <result column="permiturl" property="permiturl" jdbcType="VARCHAR" />
+    <result column="bankidurl" property="bankidurl" jdbcType="VARCHAR" />
+    <result column="cobaurl" property="cobaurl" jdbcType="VARCHAR" />
+    <result column="interiorurl" property="interiorurl" jdbcType="VARCHAR" />
+    <result column="receptionurl" property="receptionurl" jdbcType="VARCHAR" />
+    <result column="corporationidentityjusturl" property="corporationidentityjusturl" jdbcType="VARCHAR" />
+    <result column="corporationidentitycontraryurl" property="corporationidentitycontraryurl" jdbcType="VARCHAR" />
+    <result column="accountidentityjusturl" property="accountidentityjusturl" jdbcType="VARCHAR" />
+    <result column="accountidentitycontraryurl" property="accountidentitycontraryurl" jdbcType="VARCHAR" />
+    <result column="relationurl" property="relationurl" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="accounttype" property="accounttype" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="explain" property="explain" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, licenseurl, identityjusturl, identitycontraryurl, phone, mailbox, permiturl, 
+    bankidurl, cobaurl, interiorurl, receptionurl, corporationidentityjusturl, corporationidentitycontraryurl, 
+    accountidentityjusturl, accountidentitycontraryurl, relationurl, type, accounttype, 
+    status, token, createtime, explain
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from datum
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from datum
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azkj.noopsyche.entity.Datum" >
+    insert into datum (id, licenseurl, identityjusturl, 
+      identitycontraryurl, phone, mailbox, 
+      permiturl, bankidurl, cobaurl, 
+      interiorurl, receptionurl, corporationidentityjusturl, 
+      corporationidentitycontraryurl, accountidentityjusturl, 
+      accountidentitycontraryurl, relationurl, 
+      type, accounttype, status, 
+      token, createtime, explain
+      )
+    values (#{id,jdbcType=INTEGER}, #{licenseurl,jdbcType=VARCHAR}, #{identityjusturl,jdbcType=VARCHAR}, 
+      #{identitycontraryurl,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{mailbox,jdbcType=VARCHAR}, 
+      #{permiturl,jdbcType=VARCHAR}, #{bankidurl,jdbcType=VARCHAR}, #{cobaurl,jdbcType=VARCHAR}, 
+      #{interiorurl,jdbcType=VARCHAR}, #{receptionurl,jdbcType=VARCHAR}, #{corporationidentityjusturl,jdbcType=VARCHAR}, 
+      #{corporationidentitycontraryurl,jdbcType=VARCHAR}, #{accountidentityjusturl,jdbcType=VARCHAR}, 
+      #{accountidentitycontraryurl,jdbcType=VARCHAR}, #{relationurl,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{accounttype,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{token,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{explain,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azkj.noopsyche.entity.Datum" >
+    insert into datum
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="licenseurl != null" >
+        licenseurl,
+      </if>
+      <if test="identityjusturl != null" >
+        identityjusturl,
+      </if>
+      <if test="identitycontraryurl != null" >
+        identitycontraryurl,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="mailbox != null" >
+        mailbox,
+      </if>
+      <if test="permiturl != null" >
+        permiturl,
+      </if>
+      <if test="bankidurl != null" >
+        bankidurl,
+      </if>
+      <if test="cobaurl != null" >
+        cobaurl,
+      </if>
+      <if test="interiorurl != null" >
+        interiorurl,
+      </if>
+      <if test="receptionurl != null" >
+        receptionurl,
+      </if>
+      <if test="corporationidentityjusturl != null" >
+        corporationidentityjusturl,
+      </if>
+      <if test="corporationidentitycontraryurl != null" >
+        corporationidentitycontraryurl,
+      </if>
+      <if test="accountidentityjusturl != null" >
+        accountidentityjusturl,
+      </if>
+      <if test="accountidentitycontraryurl != null" >
+        accountidentitycontraryurl,
+      </if>
+      <if test="relationurl != null" >
+        relationurl,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="accounttype != null" >
+        accounttype,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="token != null" >
+        token,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="explain != null" >
+        explain,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="licenseurl != null" >
+        #{licenseurl,jdbcType=VARCHAR},
+      </if>
+      <if test="identityjusturl != null" >
+        #{identityjusturl,jdbcType=VARCHAR},
+      </if>
+      <if test="identitycontraryurl != null" >
+        #{identitycontraryurl,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="mailbox != null" >
+        #{mailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="permiturl != null" >
+        #{permiturl,jdbcType=VARCHAR},
+      </if>
+      <if test="bankidurl != null" >
+        #{bankidurl,jdbcType=VARCHAR},
+      </if>
+      <if test="cobaurl != null" >
+        #{cobaurl,jdbcType=VARCHAR},
+      </if>
+      <if test="interiorurl != null" >
+        #{interiorurl,jdbcType=VARCHAR},
+      </if>
+      <if test="receptionurl != null" >
+        #{receptionurl,jdbcType=VARCHAR},
+      </if>
+      <if test="corporationidentityjusturl != null" >
+        #{corporationidentityjusturl,jdbcType=VARCHAR},
+      </if>
+      <if test="corporationidentitycontraryurl != null" >
+        #{corporationidentitycontraryurl,jdbcType=VARCHAR},
+      </if>
+      <if test="accountidentityjusturl != null" >
+        #{accountidentityjusturl,jdbcType=VARCHAR},
+      </if>
+      <if test="accountidentitycontraryurl != null" >
+        #{accountidentitycontraryurl,jdbcType=VARCHAR},
+      </if>
+      <if test="relationurl != null" >
+        #{relationurl,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="accounttype != null" >
+        #{accounttype,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="token != null" >
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="explain != null" >
+        #{explain,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azkj.noopsyche.entity.Datum" >
+    update datum
+    <set >
+      <if test="licenseurl != null" >
+        licenseurl = #{licenseurl,jdbcType=VARCHAR},
+      </if>
+      <if test="identityjusturl != null" >
+        identityjusturl = #{identityjusturl,jdbcType=VARCHAR},
+      </if>
+      <if test="identitycontraryurl != null" >
+        identitycontraryurl = #{identitycontraryurl,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="mailbox != null" >
+        mailbox = #{mailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="permiturl != null" >
+        permiturl = #{permiturl,jdbcType=VARCHAR},
+      </if>
+      <if test="bankidurl != null" >
+        bankidurl = #{bankidurl,jdbcType=VARCHAR},
+      </if>
+      <if test="cobaurl != null" >
+        cobaurl = #{cobaurl,jdbcType=VARCHAR},
+      </if>
+      <if test="interiorurl != null" >
+        interiorurl = #{interiorurl,jdbcType=VARCHAR},
+      </if>
+      <if test="receptionurl != null" >
+        receptionurl = #{receptionurl,jdbcType=VARCHAR},
+      </if>
+      <if test="corporationidentityjusturl != null" >
+        corporationidentityjusturl = #{corporationidentityjusturl,jdbcType=VARCHAR},
+      </if>
+      <if test="corporationidentitycontraryurl != null" >
+        corporationidentitycontraryurl = #{corporationidentitycontraryurl,jdbcType=VARCHAR},
+      </if>
+      <if test="accountidentityjusturl != null" >
+        accountidentityjusturl = #{accountidentityjusturl,jdbcType=VARCHAR},
+      </if>
+      <if test="accountidentitycontraryurl != null" >
+        accountidentitycontraryurl = #{accountidentitycontraryurl,jdbcType=VARCHAR},
+      </if>
+      <if test="relationurl != null" >
+        relationurl = #{relationurl,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="accounttype != null" >
+        accounttype = #{accounttype,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="token != null" >
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="explain != null" >
+        explain = #{explain,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azkj.noopsyche.entity.Datum" >
+    update datum
+    set licenseurl = #{licenseurl,jdbcType=VARCHAR},
+      identityjusturl = #{identityjusturl,jdbcType=VARCHAR},
+      identitycontraryurl = #{identitycontraryurl,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      mailbox = #{mailbox,jdbcType=VARCHAR},
+      permiturl = #{permiturl,jdbcType=VARCHAR},
+      bankidurl = #{bankidurl,jdbcType=VARCHAR},
+      cobaurl = #{cobaurl,jdbcType=VARCHAR},
+      interiorurl = #{interiorurl,jdbcType=VARCHAR},
+      receptionurl = #{receptionurl,jdbcType=VARCHAR},
+      corporationidentityjusturl = #{corporationidentityjusturl,jdbcType=VARCHAR},
+      corporationidentitycontraryurl = #{corporationidentitycontraryurl,jdbcType=VARCHAR},
+      accountidentityjusturl = #{accountidentityjusturl,jdbcType=VARCHAR},
+      accountidentitycontraryurl = #{accountidentitycontraryurl,jdbcType=VARCHAR},
+      relationurl = #{relationurl,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      accounttype = #{accounttype,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      token = #{token,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      explain = #{explain,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,11 +1,11 @@
 package com.azkj.noopsyche.controller;
 
+
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.resp.ApiResult;
-import com.azkj.noopsyche.entity.Video;
-import com.azkj.noopsyche.entity.Videodetails;
-import com.azkj.noopsyche.service.VideoService;
+import com.azkj.noopsyche.entity.Datum;
+import com.azkj.noopsyche.service.DatunService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -13,31 +13,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@CrossOrigin
 @Slf4j
-@Api(value = "视频模块")
-public class VoidController {
+@CrossOrigin
+@Api(value = "资料上传模块")
+public class DatumController {
 
 
     @Autowired
-    @Qualifier("videoServiceImpl")
-    private VideoService videoService;
+    @Qualifier("datunServiceImpl")
+    private DatunService datunService;
 
-    @ApiOperation(value = "培训视频",notes = "培训视频",httpMethod = "POST")
+
+    @ApiOperation(value = "资料上传",notes = "资料上传",httpMethod = "POST")
     @ApiImplicitParam
-    @PostMapping("/video")
-    public ApiResult SelectVideo(){
-        ApiResult<List<Video>> result=new ApiResult();
+    @DeleteMapping("/InstrDatun")
+    public ApiResult InstrDatun(Datum datum){
+        ApiResult result=new ApiResult();
         try {
-            List<Video> videoList=videoService.SelectVideo();
-            result.setData(videoList);
-            result.setMessage("视频查询成功");
+            datunService.InstrDatun(datum);
+            result.setMessage("资料上传中审核中");
         } catch (NoopsycheException e) {
             result.setCode(e.getStatusCode());
             result.setMessage(e.getMessage());
@@ -49,16 +47,15 @@ public class VoidController {
         return result;
     }
 
-
-    @ApiOperation(value = "视频教程",notes = "视频教程",httpMethod = "POST")
+    @ApiOperation(value = "查看上传资料",notes = "查看上传资料",httpMethod = "POST")
     @ApiImplicitParam
-    @PostMapping("/videodetails")
-    public ApiResult SelectVideoDetails(String token,Integer vid){
-        ApiResult<List<Videodetails>> result=new ApiResult();
+    @DeleteMapping("/SelectDatun")
+    public ApiResult SelectDatun(String token){
+        ApiResult<Datum> result=new ApiResult();
         try {
-            List<Videodetails> videoList=videoService.SelectVideoDetails(token,vid);
-            result.setData(videoList);
-            result.setMessage("视频查询成功");
+            Datum datum=datunService.SelectDatun(token);
+            result.setData(datum);
+            result.setMessage("查看资料成功");
         } catch (NoopsycheException e) {
             result.setCode(e.getStatusCode());
             result.setMessage(e.getMessage());
