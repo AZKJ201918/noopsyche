@@ -22,7 +22,7 @@ import java.util.List;
 @CrossOrigin
 @Slf4j
 @Api(value = "视频模块")
-public class VoidController {
+public class VidoController {
 
 
     @Autowired

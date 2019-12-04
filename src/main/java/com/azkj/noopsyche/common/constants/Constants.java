@@ -54,13 +54,13 @@ public class Constants {
 
 
     /***七牛keys start****/
-    public static final String QINIU_ACCESS_KEY="xkaP1NsnhQN1Hk-FCdpTeeim3QgzBbluUogCrFdp";
+    public static final String QINIU_ACCESS_KEY="GLt1Gr-awMVuVmnSntaXKplLEhIIe6BnzCTtyXzF";
 
-    public static final String QINIU_SECRET_KEY="ccCnbOZZkn6VBl8aXEjQETlgqbkR3uGapbYYe2eU";
+    public static final String QINIU_SECRET_KEY="eIsMWbGo3VxfG5wtlfmcnj-f8xEQ3ZI53bVvfcFc";
 
-    public static final String QINIU_HEAD_IMG_BUCKET_NAME="wanqiangming";
+    public static final String QINIU_HEAD_IMG_BUCKET_NAME="whazkj";
 
-    public static final String QINIU_HEAD_IMG_BUCKET_URL="http://prhm08i1q.bkt.clouddn.com";
+    public static final String QINIU_HEAD_IMG_BUCKET_URL="http://njl.azwst.co/";
 
     /***七牛keys end****/
 

@@ -18,6 +18,7 @@ public class RedisUtil{
 
     private ValueOperations ops = null;
 
+
     @PostConstruct
     public void  init() {
         ops = redisTemplate.opsForValue();

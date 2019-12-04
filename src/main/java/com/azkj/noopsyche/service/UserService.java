@@ -5,6 +5,7 @@ import com.azkj.noopsyche.entity.Bank;
 import com.azkj.noopsyche.entity.Register;
 
 import java.util.List;
+import com.azkj.noopsyche.entity.WxUser;
 
 public interface UserService {
     String login(String code, String uuid, String encryptedData, String iv) throws NoopsycheException;
@@ -23,4 +24,6 @@ public interface UserService {
     void removeBank(Bank bank);
 
     void modifyBank(Bank bank);
+
+    WxUser SelectUserElement(String token);
 }
