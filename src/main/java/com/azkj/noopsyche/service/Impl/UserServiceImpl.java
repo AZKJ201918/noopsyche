@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
         WxUser findUser = wxUserMapper.selectUserByOpenId(openid);
         String userUUID = null;
         if (findUser != null) {
-            userUUID = findUser.getUuid();
+            userUUID = findUser.getToken();
         }
         if (userUUID != null) {//用户信息已经初始化
             System.out.println("openId已经存在,不需要插入");
@@ -147,20 +147,20 @@ public class UserServiceImpl implements UserService {
                 String mySuperiorid = wxUserMapper.selectSuperioridByOpenid(openid);
                 if (mySuperiorid == null) {//没有父id
                     if (!userUUID.equals(uuid)) {//自己不是自己的分享人
-                        user1.setUuid(userUUID);
+                        user1.setToken(userUUID);
                         user1.setHeadimgurl(headimgurl);
                         user1.setNickname(nickName);
                         user1.setUuid(uuid);
                         user1.setCreatetime(new Date());
                         wxUserMapper.updateByPrimaryKeySelective(user1);
                     } else {//自己是自己的分享人
-                        user1.setUuid(userUUID);
+                        user1.setToken(userUUID);
                         user1.setHeadimgurl(headimgurl);
                         user1.setNickname(nickName);
                         user1.setCreatetime(new Date());
                         wxUserMapper.updateByPrimaryKeySelective(user1);
                     }
-                } else {//有父id
+                } else {//有父id//已测试
                     user1 = new WxUser();
                     user1.setToken(userUUID);
                     user1.setHeadimgurl(headimgurl);
@@ -168,9 +168,9 @@ public class UserServiceImpl implements UserService {
                     user1.setCreatetime(new Date());
                     wxUserMapper.updateByPrimaryKeySelective(user1);
                 }
-            } else {//没有分享人
+            } else {//没有分享人//已测试
                 user1 = new WxUser();
-                user1.setUuid(userUUID);
+                user1.setToken(userUUID);
                 user1.setHeadimgurl(headimgurl);
                 user1.setNickname(nickName);
                 user1.setCreatetime(new Date());
@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
             WxUser user = new WxUser();
             if (uuid != null) {//有分享人
                 String mySuperiorid = wxUserMapper.selectSuperioridByOpenid(openid);
-                if (mySuperiorid == null) {//没有父id,首次进入不可能自己是自己的分享人
+                if (mySuperiorid == null) {//没有父id,首次进入不可能自己是自己的分享人//已测试
                     user.setToken(wxUserId);
                     user.setHeadimgurl(headimgurl);
                     user.setNickname(nickName);
@@ -211,7 +211,7 @@ public class UserServiceImpl implements UserService {
                     user.setCreatetime(new Date());
                     wxUserMapper.insertSelective(user);
                 }
-            } else {//没有分享人
+            } else {//没有分享人//已测试
                 user = new WxUser();
                 user.setToken(wxUserId);
                 user.setHeadimgurl(headimgurl);

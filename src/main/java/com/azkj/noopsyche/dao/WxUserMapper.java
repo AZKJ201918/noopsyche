@@ -17,7 +17,7 @@ public interface WxUserMapper {
     int updateByPrimaryKeySelective(WxUser record);
 
     int updateByPrimaryKey(WxUser record);
-    @Select("select token from wxuser where openid=#{openid}")
+    @Select("select token,createtime from wxuser where openid=#{openid}")
     WxUser selectUserByOpenId(String openid);
     @Select("select uuid from wxuser where openid=#{openid}")
     String selectSuperioridByOpenid(String openid);
