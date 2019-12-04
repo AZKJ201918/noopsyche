@@ -1,8 +1,10 @@
 package com.azkj.noopsyche.dao;
 
 import com.azkj.noopsyche.entity.WxUser;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+@Mapper
 public interface WxUserMapper {
     int deleteByPrimaryKey(String token);
 

@@ -13,6 +13,7 @@ public class NoopsycheException extends Exception{
         this.OVERALL_SITUATTION=code;
     }
 
+
     public int getStatusCode() {
         return OVERALL_SITUATTION;
     }

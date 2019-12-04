@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,9 @@ import static com.azkj.noopsyche.util.EncodeUtil.getUserInfo;
 @Slf4j
 @Api(value = "用户")
 public class UserController {
+
     @Autowired
+    @Qualifier("userServiceImpl")
     private UserService userService;
     @ApiOperation(value = "用户授权", notes = "用户授权", httpMethod = "POST")
     @ApiImplicitParam

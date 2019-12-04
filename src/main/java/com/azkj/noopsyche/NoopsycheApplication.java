@@ -15,7 +15,8 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableTransactionManagement
-public class NoopsycheApplication {
+public class NoopsycheApplication extends Throwable {
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(NoopsycheApplication.class, args);
