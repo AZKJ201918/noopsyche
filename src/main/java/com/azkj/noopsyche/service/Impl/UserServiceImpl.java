@@ -2,10 +2,12 @@ package com.azkj.noopsyche.service.Impl;
 
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
+import com.azkj.noopsyche.common.utils.LoginUtil;
+import com.azkj.noopsyche.common.utils.RedisUtil;
+import com.azkj.noopsyche.common.utils.UUIDUtils;
 import com.azkj.noopsyche.dao.WxUserMapper;
 import com.azkj.noopsyche.entity.WxUser;
 import com.azkj.noopsyche.service.UserService;
-import com.azkj.noopsyche.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.azkj.noopsyche.util.EncodeUtil.getUserInfo;
 
 @Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
