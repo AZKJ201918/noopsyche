@@ -38,4 +38,12 @@ public class RedisUtil{
         Object o = ops.get(token);
         return o;
     }
+    public void setkey(String key,String value){
+        ops.set(key,value);
+    }
+
+    public Object getkey(String key){
+        Object o = ops.get(key);
+        return o;
+    }
 }
