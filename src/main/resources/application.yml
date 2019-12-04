@@ -8,8 +8,8 @@ mybatis:
 spring:
   redis:
     database: 0
-    host: 127.0.0.1
-    #host: 192.168.0.217
+    #host: 127.0.0.1
+    host: 106.14.195.35
     #host: localhost
-    password:
+    password: azkj201918
     #password:
