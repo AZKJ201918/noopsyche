@@ -1,12 +1,9 @@
 package com.azkj.noopsyche.controller;
 
-import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.resp.ApiResult;
 
 import com.azkj.noopsyche.service.UserService;
-import com.azkj.noopsyche.util.JsonUtils;
-import com.azkj.noopsyche.util.UrlUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -17,11 +14,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.azkj.noopsyche.util.EncodeUtil.getUserInfo;
 
 @RestController
 @CrossOrigin

@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -31,7 +34,7 @@ public class DatumController {
     @ApiOperation(value = "资料上传",notes = "资料上传",httpMethod = "POST")
     @ApiImplicitParam
     @DeleteMapping("/InstrDatun")
-    public ApiResult InstrDatun(Datum datum){
+    public ApiResult InstrDatun(@RequestBody Datum datum){
         ApiResult result=new ApiResult();
         try {
             datunService.InstrDatun(datum);
@@ -51,10 +54,10 @@ public class DatumController {
     @ApiImplicitParam
     @DeleteMapping("/SelectDatun")
     public ApiResult SelectDatun(String token){
-        ApiResult<Datum> result=new ApiResult();
+        ApiResult<List<Datum>> result=new ApiResult();
         try {
-            Datum datum=datunService.SelectDatun(token);
-            result.setData(datum);
+            List<Datum> datumList=datunService.SelectDatun(token);
+            result.setData(datumList);
             result.setMessage("查看资料成功");
         } catch (NoopsycheException e) {
             result.setCode(e.getStatusCode());

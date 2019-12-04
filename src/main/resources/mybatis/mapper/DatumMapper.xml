@@ -37,6 +37,14 @@
     from datum
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="SelectDatun" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from datum
+    where token = #{token}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from datum
     where id = #{id,jdbcType=INTEGER}

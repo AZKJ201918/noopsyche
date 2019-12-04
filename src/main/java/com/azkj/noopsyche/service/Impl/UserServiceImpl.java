@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
             if (format != null && !format.equals(format1)) {
                 visitCount.incrementAndGet();
             }
-            redisUtil.setWxUser(findUser);
+            redisUtil.setkey(userUUID,findUser);
             return userUUID;
         } else {//用户没有初始化
             String wxUserId = UUIDUtils.generateMost22UUID();//用户id
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
             //Integer count1 =  wxUserMapper.insertWxUser(newUser);
             registerCount.incrementAndGet();
             visitCount.incrementAndGet();
-            redisUtil.setWxUser(findUser);
+            redisUtil.setkey(wxUserId,findUser);
             return wxUserId;
         }
     }
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
             if (format != null && !format.equals(format1)) {
                 visitCount.incrementAndGet();
             }
-            redisUtil.setWxUser(findUser);
+            redisUtil.setkey(userUUID,findUser);
             return userUUID;
         } else {//用户没有初始化
             String wxUserId = UUIDUtils.generateMost22UUID();//用户id
@@ -224,9 +224,14 @@ public class UserServiceImpl implements UserService {
             //Integer count1 =  wxUserMapper.insertWxUser(newUser);
             registerCount.incrementAndGet();
             visitCount.incrementAndGet();
-            redisUtil.setWxUser(findUser);
+            redisUtil.setkey(wxUserId,findUser);
             return wxUserId;
         }
+    }
+
+    @Override
+    public WxUser SelectUserElement(String token) {
+        return wxUserMapper.selectByPrimaryKey(token);
     }
 }
 
