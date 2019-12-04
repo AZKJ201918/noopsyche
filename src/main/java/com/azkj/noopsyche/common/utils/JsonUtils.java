@@ -1,4 +1,4 @@
-package com.azkj.noopsyche.util;
+package com.azkj.noopsyche.common.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;

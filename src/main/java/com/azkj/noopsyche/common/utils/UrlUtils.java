@@ -1,4 +1,4 @@
-package com.azkj.noopsyche.util;
+package com.azkj.noopsyche.common.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

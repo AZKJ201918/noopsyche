@@ -1,4 +1,4 @@
-package com.azkj.noopsyche.util;
+package com.azkj.noopsyche.common.utils;
 
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;

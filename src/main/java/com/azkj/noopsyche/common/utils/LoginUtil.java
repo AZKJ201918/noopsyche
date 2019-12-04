@@ -1,4 +1,4 @@
-package com.azkj.noopsyche.util;
+package com.azkj.noopsyche.common.utils;
 
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.entity.WxUser;
@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.azkj.noopsyche.util.EncodeUtil.getUserInfo;
+import static com.azkj.noopsyche.common.utils.EncodeUtil.getUserInfo;
+
 
 public class LoginUtil {
     public static WxUser login(String code,String encryptedData,String iv){
