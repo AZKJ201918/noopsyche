@@ -31,6 +31,7 @@ public class RedisUtil{
     public void setkey(String key,String value){
         ops.set(key,value);
     }
+
     public Object getkey(String key){
         Object o = ops.get(key);
         return o;

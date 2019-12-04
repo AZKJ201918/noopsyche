@@ -17,13 +17,13 @@ public class WebConfigurer implements WebMvcConfigurer {
         return new LoginInterceptor();
     }
 
+
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // addPathPatterns 用于添加拦截规则
         // excludePathPatterns 用户排除拦截
         WebMvcConfigurer.super.addInterceptors(registry);
-        registry.addInterceptor(localInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/user","/swagger-resources/**",
-                "/webjars/**", "/v2/**", "/swagger-ui.html/**");
+        registry.addInterceptor(localInterceptor()).addPathPatterns("/**").excludePathPatterns("/uploading","/user","/swagger-resources/**","/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
 }
