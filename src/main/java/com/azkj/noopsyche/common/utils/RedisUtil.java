@@ -25,13 +25,16 @@ public class RedisUtil{
 
 
 
-    public void setWxUser(WxUser wxUser){
-        ops.set(wxUser,wxUser,15L, TimeUnit.MINUTES);
+    public void setObject(String token,Object object,Long time){
+        ops.set(token,object,time,TimeUnit.MINUTES);
     }
 
+    public void setObjectSeconds(String token,Object object,Long time){
+        ops.set(token,object,time,TimeUnit.MILLISECONDS);
+    }
 
-    public WxUser getWxUser(WxUser wxUser){
-        WxUser o = (WxUser) ops.get(wxUser);
+    public Object getObject(String token){
+        Object o = ops.get(token);
         return o;
     }
 }
