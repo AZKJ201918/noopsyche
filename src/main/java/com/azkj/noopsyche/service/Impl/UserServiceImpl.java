@@ -19,9 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -40,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private static AtomicInteger registerCount = new AtomicInteger(0);
 
     private static AtomicInteger visitCount = new AtomicInteger(0);
+
 
     @Override
     public String login(String code, String uuid, String encryptedData, String iv) throws NoopsycheException {
@@ -260,6 +265,11 @@ public class UserServiceImpl implements UserService {
         }
         Integer pea  =score/change;
         wxUserMapper.updatePea(pea,uuid);
+    }
+
+    @Override
+    public WxUser SelectUserElement(String token) {
+        return wxUserMapper.selectByPrimaryKey(token);
     }
 }
 
