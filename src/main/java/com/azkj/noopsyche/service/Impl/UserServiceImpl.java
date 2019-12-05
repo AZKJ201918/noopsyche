@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private static AtomicInteger registerCount = new AtomicInteger(0);
 
     private static AtomicInteger visitCount = new AtomicInteger(0);
+
 
     @Override
     public String login(String code, String uuid, String encryptedData, String iv) throws NoopsycheException {
@@ -207,6 +209,11 @@ public class UserServiceImpl implements UserService {
     public void modifyBank(Bank bank) {
         bankMapper.updateStatusToFeiMonren(bank.getToken());
         bankMapper.updateByBankId(bank);
+    }
+
+    @Override
+    public WxUser SelectUserElement(String token) {
+        return wxUserMapper.selectByPrimaryKey(token);
     }
 }
 
