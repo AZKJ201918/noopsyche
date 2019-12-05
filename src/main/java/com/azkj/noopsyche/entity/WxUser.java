@@ -15,7 +15,7 @@ public class WxUser implements Serializable {
 
     private String headimgurl;
 
-    private String phone;
+    private String pea;
 
     private String uuid;
 

@@ -10,8 +10,7 @@ import com.azkj.noopsyche.common.utils.sm.sendSmsUtil;
 import com.azkj.noopsyche.entity.Bank;
 import com.azkj.noopsyche.entity.Register;
 import com.azkj.noopsyche.service.UserService;
-import com.azkj.noopsyche.util.JsonUtils;
-import com.azkj.noopsyche.util.UrlUtils;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -41,8 +40,7 @@ public class UserController {
     @Autowired
     @Qualifier("userServiceImpl")
     private UserService userService;
-    @Autowired
-    private RedisUtil redisUtil;
+
 
 
     @ApiOperation(value = "用户授权", notes = "用户授权", httpMethod = "POST")
@@ -66,30 +64,12 @@ public class UserController {
     public ApiResult getSmsCode(String phone){
         ApiResult<Object> result = new ApiResult<>();
         try {
-            int code= (int) (Math.random()*900000+100000);
-            Object object = redisUtil.getObject("phone:" + phone);
-            if (object!=null){
-                result.setMessage("请勿重新发送验证码");
-                result.setCode(Constants.RESP_STATUS_BADREQUEST);
-                return result;
-            }
-            Integer num = (Integer) redisUtil.getObject("getSmsCodeTime:" + phone);
-            if (num!=null&&num>=3){
-                result.setMessage("每天只能发送一次验证码");
-                result.setCode(Constants.RESP_STATUS_BADREQUEST);
-                return result;
-            }
-            sendSmsUtil.execute(phone,code+"");
-            redisUtil.setObject("phone:"+phone,code+"",3L);
-            if (num==null){
-                num=1;
-            }else {
-                num++;
-            }
-            long now = new Date().getTime();
-            long time = DateUtil.getTodayEndTime().getTime();
-            redisUtil.setObjectSeconds("getSmsCodeTime:"+phone,num,time-now);
+            userService.sendSmsCode(phone);
             result.setMessage("验证码发送正常");
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
         } catch (Exception e) {
             e.printStackTrace();
             result.setMessage("服务器异常");
@@ -118,22 +98,11 @@ public class UserController {
     }
     @ApiOperation(value = "注册",notes = "注册",httpMethod = "POST")
     @ApiImplicitParam
-    @PostMapping("/register")
+    @PostMapping("/register")//已测试
     public ApiResult register(@RequestBody Register register,@RequestBody Bank bank,String smsCode){
         ApiResult<String> result = new ApiResult<>();
         try {
-            String code = (String) redisUtil.getObject("phone:" + register.getPhone());
-            if (code==null){
-                result.setMessage("你还没有发送验证码，或者验证码过期");
-                result.setCode(Constants.RESP_STATUS_BADREQUEST);
-                return result;
-            }
-            if (!code.equals(smsCode)){
-                result.setMessage("验证码输入不正确");
-                result.setCode(Constants.RESP_STATUS_BADREQUEST);
-                return result;
-            }
-            userService.addRegister(register,bank);
+            userService.addRegister(register,bank,smsCode);
             result.setMessage("注册成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,10 +111,10 @@ public class UserController {
         }
         return result;
     }
-    @ApiOperation(value = "修改手机号",notes = "修改手机号",httpMethod = "POST")
+    @ApiOperation(value = "修改手机号",notes = "修改手机号,通过token",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/modifyPhone")
-    public ApiResult register(@RequestBody Register register){
+    public ApiResult modifyPhone(@RequestBody Register register){//已测试
         ApiResult<String> result = new ApiResult<>();
         try {
             userService.modifyPhone(register);
@@ -160,7 +129,7 @@ public class UserController {
     @ApiOperation(value = "新增银行卡",notes = "新增银行卡",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/addBank")
-    public ApiResult addBank(@RequestBody Bank bank){
+    public ApiResult addBank(@RequestBody Bank bank){//已测试
         ApiResult<String> result = new ApiResult<>();
         try {
             userService.addBank(bank);
@@ -176,10 +145,11 @@ public class UserController {
     @ApiImplicitParam
     @PostMapping("/selectBank")
     public ApiResult selectBank(String token){
-        ApiResult<String> result = new ApiResult<>();
+        ApiResult<List<Bank>> result = new ApiResult<>();
         try {
             List<Bank> bankList=userService.findBank(token);
             result.setMessage("查看银行卡成功");
+            result.setData(bankList);
         } catch (NoopsycheException e) {
             e.printStackTrace();
             result.setMessage(e.getMessage());
@@ -194,7 +164,7 @@ public class UserController {
     @ApiOperation(value = "删除银行卡",notes = "根据银行卡号删除银行卡",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/deleteBank")
-    public ApiResult deleteBank(@RequestBody Bank bank){
+    public ApiResult deleteBank(@RequestBody Bank bank){//已删除
         ApiResult<String> result = new ApiResult<>();
         try {
             userService.removeBank(bank);
@@ -206,14 +176,32 @@ public class UserController {
         }
         return result;
     }
-    @ApiOperation(value = "修改为默认银行卡",notes = "银行卡",httpMethod = "POST")
+    @ApiOperation(value = "修改为默认银行卡",notes = "需要用户token",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/modifyBank")
-    public ApiResult modifyBank(@RequestBody Bank bank){
+    public ApiResult modifyBank(@RequestBody Bank bank){//已测试
         ApiResult<String> result = new ApiResult<>();
         try {
             userService.modifyBank(bank);
             result.setMessage("修改为默认银行卡成功");
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "积分兑换臻豆",notes = "积分兑换臻豆",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/changeBean")
+    public ApiResult changeBean(Integer score,String uuid){
+        ApiResult<String> result = new ApiResult<>();
+        try {
+            userService.exchangePea(score,uuid);
+        }catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
         }catch (Exception e) {
             e.printStackTrace();
             result.setMessage("后台服务器异常");
