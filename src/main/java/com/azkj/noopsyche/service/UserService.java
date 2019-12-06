@@ -13,7 +13,7 @@ public interface UserService {
 
     void findRegister(String token) throws NoopsycheException;
 
-    void addRegister(Register register, Bank bank);
+    void addRegister(Register register, Bank bank,String smsCode) throws NoopsycheException;
 
     void modifyPhone(Register register);
 
@@ -26,4 +26,8 @@ public interface UserService {
     void modifyBank(Bank bank);
 
     WxUser SelectUserElement(String token);
+
+    void sendSmsCode(String phone) throws Exception;
+
+    void exchangePea(Integer score, String uuid) throws NoopsycheException;
 }

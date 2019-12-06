@@ -22,7 +22,7 @@ public interface BankMapper {
 
     int updateByPrimaryKey(Bank record);
     @Select("select bankid from bank where status=0 and token=#{token}")
-    Integer selectByToken(String token);
+    String selectByToken(String token);
     @Select("select id,bankid,token,status from bank where token =#{token}")
     List<Bank> selectBank(String token);
     @Delete("delete from bank where bankid=#{bankid}")

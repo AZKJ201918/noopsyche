@@ -2,13 +2,16 @@ package com.azkj.noopsyche.service.Impl;
 
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
+import com.azkj.noopsyche.common.utils.DateUtil;
 import com.azkj.noopsyche.common.utils.LoginUtil;
 import com.azkj.noopsyche.common.utils.RedisUtil;
 import com.azkj.noopsyche.common.utils.UUIDUtils;
+import com.azkj.noopsyche.common.utils.sm.sendSmsUtil;
 import com.azkj.noopsyche.dao.BankMapper;
 import com.azkj.noopsyche.dao.RegisterMapper;
 import com.azkj.noopsyche.dao.WxUserMapper;
 import com.azkj.noopsyche.entity.Bank;
+import com.azkj.noopsyche.entity.ExchangePea;
 import com.azkj.noopsyche.entity.Register;
 import com.azkj.noopsyche.entity.WxUser;
 import com.azkj.noopsyche.service.UserService;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private RegisterMapper registerMapper;
     @Autowired
     private BankMapper bankMapper;
+
 
     private static AtomicInteger registerCount = new AtomicInteger(0);
 
@@ -165,7 +170,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addRegister(Register register, Bank bank) {
+    public void addRegister(Register register, Bank bank,String smsCode) throws NoopsycheException {
+       String code = (String) redisUtil.getObject("phone:" + register.getPhone());
+        if (code==null){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"你还没有发送验证码,或者验证码已过期");
+        }
+        if (!code.equals(smsCode)){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"验证码输入不正确");
+        }
         registerMapper.insertSelective(register);
         if (bank!=null){
             bank.setToken(register.getToken());
@@ -181,7 +193,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addBank(Bank bank) {
-        Integer bankid=bankMapper.selectByToken(bank.getToken());
+        String bankid=bankMapper.selectByToken(bank.getToken());
         if (bankid==null){//没有默认银行卡
             bank.setStatus(0);
         }else {
@@ -209,6 +221,50 @@ public class UserServiceImpl implements UserService {
     public void modifyBank(Bank bank) {
         bankMapper.updateStatusToFeiMonren(bank.getToken());
         bankMapper.updateByBankId(bank);
+    }
+
+    @Override
+    public WxUser SelectUserElement(String token) {
+        return null;
+    }
+
+    @Override
+    public void sendSmsCode(String phone) throws Exception {
+        int code= (int) (Math.random()*900000+100000);
+        Object object = redisUtil.getObject("phone:" + phone);
+        if (object!=null){
+           throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"请勿重新发送验证码");
+        }
+        Integer num = (Integer) redisUtil.getObject("getSmsCodeTime:" + phone);
+        if (num!=null&&num>=3){
+           throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"每天只能发送一次验证码");
+        }
+        sendSmsUtil.execute(phone,code+"");
+        redisUtil.setObject("phone:"+phone,code+"",3L);
+        if (num==null){
+            num=1;
+        }else {
+            num++;
+        }
+        long now = new Date().getTime();
+        long time = DateUtil.getTodayEndTime().getTime();
+        redisUtil.setObjectSeconds("getSmsCodeTime:"+phone,num,time-now);
+    }
+
+    @Override
+    public void exchangePea(Integer score, String uuid) throws NoopsycheException {
+        ExchangePea exchangePea=wxUserMapper.selectPea();
+        if (exchangePea==null){
+            throw new NoopsycheException("没有兑换信息");
+        }
+        Integer change=null;
+        if (exchangePea.getStatus()==1){
+            change=exchangePea.getActiveexchange();
+        }else {
+            change=exchangePea.getNormalexchange();
+        }
+        Integer pea  =score/change;
+        wxUserMapper.updatePea(pea,uuid);
     }
 
     @Override
