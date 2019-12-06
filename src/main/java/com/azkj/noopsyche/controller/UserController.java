@@ -99,19 +99,7 @@ public class UserController {
     public ApiResult register(@RequestBody Register register,@RequestBody Bank bank,String smsCode){
         ApiResult<String> result = new ApiResult<>();
         try {
-            String code = (String) redisUtil.getObject("phone:" + register.getPhone());
 
-            if (code==null){
-                result.setMessage("你还没有发送验证码，或者验证码过期");
-                result.setCode(Constants.RESP_STATUS_BADREQUEST);
-                return result;
-            }
-            if (!code.equals(smsCode)){
-                result.setMessage("验证码输入不正确");
-                result.setCode(Constants.RESP_STATUS_BADREQUEST);
-                return result;
-            }
-            userService.addRegister(register,bank);
             userService.addRegister(register,bank,smsCode);
             result.setMessage("注册成功");
         } catch (Exception e) {

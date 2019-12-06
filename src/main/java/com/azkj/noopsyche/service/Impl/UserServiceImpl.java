@@ -223,10 +223,6 @@ public class UserServiceImpl implements UserService {
         bankMapper.updateByBankId(bank);
     }
 
-    @Override
-    public WxUser SelectUserElement(String token) {
-        return null;
-    }
 
     @Override
     public void sendSmsCode(String phone) throws Exception {
