@@ -52,4 +52,6 @@ public class Datum {
     private Date createtime;
 
     private String explain;
+
+    private String mininame;
 }

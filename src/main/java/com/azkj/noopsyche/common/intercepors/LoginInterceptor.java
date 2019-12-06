@@ -31,6 +31,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         Map<String,Object> map=new HashMap<>();
         try {
             Boolean userElement=userElementUtils.UserElement(token);
+            return userElement;
         } catch (NoopsycheException e) {
             map.put("code",e.getStatusCode());
             map.put("message",e.getMessage());
@@ -42,7 +43,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             returnJson(response, JSON.toJSONString(map).toString());
             return false;
         }
-        return true;
     }
 
 

@@ -119,6 +119,7 @@ public class UserController {
         ApiResult<String> result = new ApiResult<>();
         try {
             String code = (String) redisUtil.getObject("phone:" + register.getPhone());
+
             if (code==null){
                 result.setMessage("你还没有发送验证码，或者验证码过期");
                 result.setCode(Constants.RESP_STATUS_BADREQUEST);
