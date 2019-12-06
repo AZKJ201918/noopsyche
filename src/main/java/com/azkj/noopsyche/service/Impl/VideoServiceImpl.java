@@ -18,9 +18,9 @@ import java.util.List;
 @Service("videoServiceImpl")
 public class VideoServiceImpl implements VideoService{
 
-    private final static String CHECK_STATE_TUTION="1";
+    private final static String CHECK_STATE_TUTION="1";//上级
 
-    private final static String CHECK_STATE_SUSPEND="2";
+    private final static String CHECK_STATE_SUSPEND="2";//下架
 
     @Autowired
     private VideoMapper videoMapper;
