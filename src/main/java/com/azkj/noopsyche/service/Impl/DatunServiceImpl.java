@@ -15,11 +15,11 @@ import java.util.List;
 @Service("datunServiceImpl")
 public class DatunServiceImpl implements DatunService{
 
-   private final static Integer CHECK_STATE_REVIVE=1;
+   private final static Integer CHECK_STATE_REVIVE=1;//审核中
 
-    private final static Integer CHECK_STATE_NOPASS=2;
+    private final static Integer CHECK_STATE_NOPASS=2;//审核不通过
 
-    private final static Integer CHECK_STATE_TRANSIT =3;
+    private final static Integer CHECK_STATE_TRANSIT =3;//审核通过
 
 
 

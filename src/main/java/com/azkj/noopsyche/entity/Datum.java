@@ -1,7 +1,5 @@
 package com.azkj.noopsyche.entity;
 
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
 import java.util.Date;
@@ -52,4 +50,6 @@ public class Datum {
     private Date createtime;
 
     private String explain;
+
+    private String mininame;
 }

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.azkj.noopsyche.dao.MiniOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.azkj.noopsyche.entity.MiniOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="mid" property="mid" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="preferential" property="preferential" jdbcType="DECIMAL" />
+    <result column="orderid" property="orderid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, token, mid, createtime, price, endtime, status, preferential, orderid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from miniorder
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from miniorder
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azkj.noopsyche.entity.MiniOrder" >
+    insert into miniorder (id, token, mid, 
+      createtime, price, endtime, 
+      status, preferential, orderid
+      )
+    values (#{id,jdbcType=INTEGER}, #{token,jdbcType=VARCHAR}, #{mid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{price,jdbcType=DECIMAL}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{preferential,jdbcType=DECIMAL}, #{orderid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azkj.noopsyche.entity.MiniOrder" >
+    insert into miniorder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="token != null" >
+        token,
+      </if>
+      <if test="mid != null" >
+        mid,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="preferential != null" >
+        preferential,
+      </if>
+      <if test="orderid != null" >
+        orderid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="token != null" >
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="mid != null" >
+        #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="preferential != null" >
+        #{preferential,jdbcType=DECIMAL},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azkj.noopsyche.entity.MiniOrder" >
+    update miniorder
+    <set >
+      <if test="token != null" >
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="mid != null" >
+        mid = #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="preferential != null" >
+        preferential = #{preferential,jdbcType=DECIMAL},
+      </if>
+      <if test="orderid != null" >
+        orderid = #{orderid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azkj.noopsyche.entity.MiniOrder" >
+    update miniorder
+    set token = #{token,jdbcType=VARCHAR},
+      mid = #{mid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      price = #{price,jdbcType=DECIMAL},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      preferential = #{preferential,jdbcType=DECIMAL},
+      orderid = #{orderid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

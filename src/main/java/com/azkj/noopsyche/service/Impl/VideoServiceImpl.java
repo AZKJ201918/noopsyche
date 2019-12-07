@@ -7,6 +7,7 @@ import com.azkj.noopsyche.dao.VideodetailsMapper;
 import com.azkj.noopsyche.entity.Video;
 import com.azkj.noopsyche.entity.VideoEmploy;
 import com.azkj.noopsyche.entity.Videodetails;
+import com.azkj.noopsyche.entity.WxUser;
 import com.azkj.noopsyche.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,10 @@ import java.util.List;
 
 @Service("videoServiceImpl")
 public class VideoServiceImpl implements VideoService{
+
+    private final static String CHECK_STATE_TUTION="1";//上级
+
+    private final static String CHECK_STATE_SUSPEND="2";//下架
 
     @Autowired
     private VideoMapper videoMapper;
@@ -46,6 +51,21 @@ public class VideoServiceImpl implements VideoService{
             throw  new NoopsycheException(400,"没有视频");
         }
         return videodetailsList;
+
+    }
+
+    @Override
+    public void ConversionVideo(VideoEmploy videoEmploy) throws NoopsycheException {
+        VideoEmploy video=videoEmployMapper.SelectVideoEmploy(videoEmploy.getToken(),videoEmploy.getVid());
+        if(video!=null){
+            throw new NoopsycheException(400,"你已经兑换过这个课程了");
+        }
+
+        Video videos=videoMapper.selectByPrimaryKey(videoEmploy.getVid());
+        if (CHECK_STATE_SUSPEND.equals(videos.getStatus())) {
+           throw new NoopsycheException(400,"课程已经下架");
+        }
+        videoEmployMapper.insertSelective(videoEmploy);
 
     }
 }

@@ -1,7 +1,10 @@
 package com.azkj.noopsyche.entity;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class VideoEmploy {
     private Integer id;
 
