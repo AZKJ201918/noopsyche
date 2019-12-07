@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.azkj.noopsyche.dao.MiniMapper" >
+  <resultMap id="BaseResultMap" type="com.azkj.noopsyche.entity.Mini" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mininame" property="mininame" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="details" property="details" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="slideshow" property="slideshow" jdbcType="VARCHAR" />
+    <result column="breviary" property="breviary" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mininame, price, introduce, details, url, slideshow, breviary, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mini
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mini
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azkj.noopsyche.entity.Mini" >
+    insert into mini (id, mininame, price, 
+      introduce, details, url, 
+      slideshow, breviary, status
+      )
+    values (#{id,jdbcType=INTEGER}, #{mininame,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{introduce,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{slideshow,jdbcType=VARCHAR}, #{breviary,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azkj.noopsyche.entity.Mini" >
+    insert into mini
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mininame != null" >
+        mininame,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+      <if test="details != null" >
+        details,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="slideshow != null" >
+        slideshow,
+      </if>
+      <if test="breviary != null" >
+        breviary,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mininame != null" >
+        #{mininame,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null" >
+        #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="slideshow != null" >
+        #{slideshow,jdbcType=VARCHAR},
+      </if>
+      <if test="breviary != null" >
+        #{breviary,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azkj.noopsyche.entity.Mini" >
+    update mini
+    <set >
+      <if test="mininame != null" >
+        mininame = #{mininame,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null" >
+        details = #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="slideshow != null" >
+        slideshow = #{slideshow,jdbcType=VARCHAR},
+      </if>
+      <if test="breviary != null" >
+        breviary = #{breviary,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azkj.noopsyche.entity.Mini" >
+    update mini
+    set mininame = #{mininame,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      details = #{details,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      slideshow = #{slideshow,jdbcType=VARCHAR},
+      breviary = #{breviary,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
