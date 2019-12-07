@@ -19,13 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -170,7 +166,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addRegister(Register register, Bank bank,String smsCode) throws NoopsycheException {
+    public void addRegister(Register register, String smsCode) throws NoopsycheException {
        String code = (String) redisUtil.getObject("phone:" + register.getPhone());
         if (code==null){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"你还没有发送验证码,或者验证码已过期");
@@ -178,7 +174,11 @@ public class UserServiceImpl implements UserService {
         if (!code.equals(smsCode)){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"验证码输入不正确");
         }
+        if (register==null){
+            throw new NoopsycheException("注册信息输入不完整");
+        }
         registerMapper.insertSelective(register);
+        Bank bank = register.getBank();
         if (bank!=null){
             bank.setToken(register.getToken());
             bank.setStatus(0);
@@ -221,11 +221,6 @@ public class UserServiceImpl implements UserService {
     public void modifyBank(Bank bank) {
         bankMapper.updateStatusToFeiMonren(bank.getToken());
         bankMapper.updateByBankId(bank);
-    }
-
-    @Override
-    public WxUser SelectUserElement(String token) {
-        return null;
     }
 
     @Override

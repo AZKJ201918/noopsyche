@@ -13,7 +13,7 @@ public interface UserService {
 
     void findRegister(String token) throws NoopsycheException;
 
-    void addRegister(Register register, Bank bank,String smsCode) throws NoopsycheException;
+    void addRegister(Register register, String smsCode) throws NoopsycheException;
 
     void modifyPhone(Register register);
 

@@ -96,10 +96,10 @@ public class UserController {
     @ApiOperation(value = "注册",notes = "注册",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/register")//已测试
-    public ApiResult register(@RequestBody Register register,@RequestBody Bank bank,String smsCode){
+    public ApiResult register(@RequestBody Register register,String smsCode){
         ApiResult<String> result = new ApiResult<>();
         try {
-            userService.addRegister(register,bank,smsCode);
+            userService.addRegister(register,smsCode);
             result.setMessage("注册成功");
         } catch (Exception e) {
             e.printStackTrace();

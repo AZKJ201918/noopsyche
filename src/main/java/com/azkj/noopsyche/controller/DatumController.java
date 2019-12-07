@@ -73,9 +73,9 @@ public class DatumController {
 
 
 
-    @ApiOperation(value = "查看上传资料图片",notes = "查看上传图片",httpMethod = "PUT")
+    @ApiOperation(value = "查看上传资料图片",notes = "查看上传图片",httpMethod = "POST")
     @ApiImplicitParam
-    @PutMapping("/uploading")
+    @PostMapping("/uploading")
     public ApiResult Uploading(HttpServletRequest req, @RequestParam(required=false ) MultipartFile file){
         ApiResult result=new ApiResult();
         try {

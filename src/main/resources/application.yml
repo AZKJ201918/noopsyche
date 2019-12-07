@@ -1,5 +1,5 @@
 server:
-  port: 555
+  port: 888
 
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
@@ -13,3 +13,13 @@ spring:
     #host: localhost
     password: azkj201918
     #password:
+  data:
+    solr:
+      host: http://106.14.195.35:8080/solr
+  transaction:
+      rollback-on-commit-failure: true
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
