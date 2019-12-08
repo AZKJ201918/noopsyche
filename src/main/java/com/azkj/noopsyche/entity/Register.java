@@ -13,4 +13,6 @@ public class Register {
     private String name;
 
     private Bank bank;
+
+    private String smsCode;//验证码
 }

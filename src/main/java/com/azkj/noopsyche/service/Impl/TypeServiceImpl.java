@@ -66,7 +66,7 @@ public class TypeServiceImpl implements TypeService {
                             // 将文档结果集中的name设置为高亮后的name
                             solrDocument.setField("name", name);
                         }
-                        if (highlightCategory != null && !highlightCategory.isEmpty()) {
+                        if (highlightCategory != null && !highlightCategory.isEmpty()){
                             String category = highlightCategory.get(0);
                             // 将文档结果集中的category设置为高亮后的category
                             solrDocument.setField("category", category);
