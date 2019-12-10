@@ -5,6 +5,13 @@ mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
 
+
+activemq:
+  broker-url: tcp://106.14.195.35:61616
+  pool:
+    enabled: false
+
+
 spring:
   redis:
     database: 0
@@ -15,7 +22,7 @@ spring:
     #password:
   data:
     solr:
-      host: http://106.14.195.35:8080/solr
+      host: http://106.14.195.35:8080/solr/sku
   transaction:
       rollback-on-commit-failure: true
 pagehelper:

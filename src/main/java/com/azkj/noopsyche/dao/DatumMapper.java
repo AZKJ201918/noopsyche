@@ -2,6 +2,7 @@ package com.azkj.noopsyche.dao;
 
 import com.azkj.noopsyche.entity.Datum;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface DatumMapper {
 
     int updateByPrimaryKey(Datum record);
 
-    List<Datum> SelectDatun(String token);
+    List<Datum> SelectDatun(@Param("token") String token);
 }
