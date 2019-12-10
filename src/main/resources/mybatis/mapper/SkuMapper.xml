@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.azkj.noopsyche.dao.SkuMapper" >
+  <resultMap id="BaseResultMap" type="com.azkj.noopsyche.entity.Sku" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="spuid" property="spuid" jdbcType="INTEGER" />
+    <result column="skuname" property="skuname" jdbcType="VARCHAR" />
+    <result column="skuprice" property="skuprice" jdbcType="DECIMAL" />
+    <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
+    <result column="enable" property="enable" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="repertory" property="repertory" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, spuid, skuname, skuprice, imgurl, enable, createtime, updatetime, repertory
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sku
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sku
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azkj.noopsyche.entity.Sku" >
+    insert into sku (id, spuid, skuname, 
+      skuprice, imgurl, enable, 
+      createtime, updatetime, repertory
+      )
+    values (#{id,jdbcType=INTEGER}, #{spuid,jdbcType=INTEGER}, #{skuname,jdbcType=VARCHAR}, 
+      #{skuprice,jdbcType=DECIMAL}, #{imgurl,jdbcType=VARCHAR}, #{enable,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{repertory,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.azkj.noopsyche.entity.Sku" >
+    insert into sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="spuid != null" >
+        spuid,
+      </if>
+      <if test="skuname != null" >
+        skuname,
+      </if>
+      <if test="skuprice != null" >
+        skuprice,
+      </if>
+      <if test="imgurl != null" >
+        imgurl,
+      </if>
+      <if test="enable != null" >
+        enable,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+      <if test="repertory != null" >
+        repertory,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="spuid != null" >
+        #{spuid,jdbcType=INTEGER},
+      </if>
+      <if test="skuname != null" >
+        #{skuname,jdbcType=VARCHAR},
+      </if>
+      <if test="skuprice != null" >
+        #{skuprice,jdbcType=DECIMAL},
+      </if>
+      <if test="imgurl != null" >
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repertory != null" >
+        #{repertory,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azkj.noopsyche.entity.Sku" >
+    update sku
+    <set >
+      <if test="spuid != null" >
+        spuid = #{spuid,jdbcType=INTEGER},
+      </if>
+      <if test="skuname != null" >
+        skuname = #{skuname,jdbcType=VARCHAR},
+      </if>
+      <if test="skuprice != null" >
+        skuprice = #{skuprice,jdbcType=DECIMAL},
+      </if>
+      <if test="imgurl != null" >
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repertory != null" >
+        repertory = #{repertory,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azkj.noopsyche.entity.Sku" >
+    update sku
+    set spuid = #{spuid,jdbcType=INTEGER},
+      skuname = #{skuname,jdbcType=VARCHAR},
+      skuprice = #{skuprice,jdbcType=DECIMAL},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      enable = #{enable,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      repertory = #{repertory,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
