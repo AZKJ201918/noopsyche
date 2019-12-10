@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Service("minlServiceImpl")
-public class MinlServiceImpl implements MiniService {
+@Service("miniServiceImpl")
+public class MiniServiceImpl implements MiniService {
 
     @Autowired
     private MiniMapper miniMapper;

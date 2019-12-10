@@ -30,7 +30,7 @@ import java.util.Map;
 public class MiniController {
 
     @Autowired
-    @Qualifier("minlServiceImpl")
+    @Qualifier("miniServiceImpl")
     private MiniService miniService;
 
 
@@ -103,7 +103,6 @@ public class MiniController {
     @ApiImplicitParam
     @PostMapping("/mininotifyurl")
     public Map purchaseMini(HttpServletRequest request, HttpServletResponse response) {
-
         Map<String,String> map=new HashMap<>();
         String inputLine = "";
         String notityXml = "";
