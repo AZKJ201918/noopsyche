@@ -1,5 +1,8 @@
 package com.azkj.noopsyche.entity;
 
+import lombok.Data;
+
+@Data
 public class Register {
     private Integer id;
 
@@ -9,35 +12,7 @@ public class Register {
 
     private String name;
 
-    public Integer getId() {
-        return id;
-    }
+    private Bank bank;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token == null ? null : token.trim();
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+    private String smsCode;//验证码
 }

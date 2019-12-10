@@ -9,6 +9,7 @@ import com.azkj.noopsyche.common.utils.RedisUtil;
 import com.azkj.noopsyche.common.utils.sm.sendSmsUtil;
 import com.azkj.noopsyche.entity.Bank;
 import com.azkj.noopsyche.entity.Register;
+import com.azkj.noopsyche.entity.WxUser;
 import com.azkj.noopsyche.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -40,18 +41,39 @@ public class UserController {
 
 
 
-    @ApiOperation(value = "用户授权", notes = "用户授权", httpMethod = "POST")
+    @ApiOperation(value = "用户授权", notes = "用户登录", httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/user")
-    public ApiResult user(String code, String uuid, String encryptedData, String iv) {
+    public ApiResult user(WxUser wxUser) {
         ApiResult<Object> result = new ApiResult<>();
         try {
-            String token=userService.login(code,uuid,encryptedData,iv);
+            String token=userService.login(wxUser);
             result.setData(token);
             result.setMessage("登录成功");
         } catch (NoopsycheException e) {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
+        }catch (Exception e) {
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "解码", notes = "解码", httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/encode")
+    public ApiResult encode(String code, String encryptedData, String iv) {
+        ApiResult<Object> result = new ApiResult<>();
+        try {
+            WxUser wxUser=userService.encode(code,encryptedData,iv);
+            result.setData(wxUser);
+            result.setMessage("登录成功");
+        } catch (NoopsycheException e) {
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
+        }catch (Exception e) {
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
         return result;
     }
@@ -95,12 +117,11 @@ public class UserController {
     }
     @ApiOperation(value = "注册",notes = "注册",httpMethod = "POST")
     @ApiImplicitParam
-    @PostMapping("/register")
-    public ApiResult register(@RequestBody Register register,@RequestBody Bank bank,String smsCode){
+    @PostMapping("/register")//已测试
+    public ApiResult register(@RequestBody Register register,String smsCode){
         ApiResult<String> result = new ApiResult<>();
         try {
-
-            userService.addRegister(register,bank,smsCode);
+            userService.addRegister(register,smsCode);
             result.setMessage("注册成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,7 +138,11 @@ public class UserController {
         try {
             userService.modifyPhone(register);
             result.setMessage("修改手机号成功");
-        } catch (Exception e) {
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
+        }catch (Exception e) {
             e.printStackTrace();
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);

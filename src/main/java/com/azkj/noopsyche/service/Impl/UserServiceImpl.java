@@ -19,13 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -47,17 +43,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String login(String code, String uuid, String encryptedData, String iv) throws NoopsycheException {
-        if (code == null) {
-            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST, "没有code");
-        }
-        WxUser wxUser = LoginUtil.login(code, encryptedData, iv);
+    public String login(WxUser wxUser) throws NoopsycheException {
         if (wxUser == null) {
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST, "没有用户信息");
         }
         String openid = wxUser.getOpenid();
         String headimgurl = wxUser.getHeadimgurl();
         String nickName = wxUser.getNickname();
+        String uuid = wxUser.getUuid();
         if (openid==null){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"用户信息错误");
         }
@@ -170,7 +163,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addRegister(Register register, Bank bank,String smsCode) throws NoopsycheException {
+    public void addRegister(Register register, String smsCode) throws NoopsycheException {
        String code = (String) redisUtil.getObject("phone:" + register.getPhone());
         if (code==null){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"你还没有发送验证码,或者验证码已过期");
@@ -178,7 +171,11 @@ public class UserServiceImpl implements UserService {
         if (!code.equals(smsCode)){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"验证码输入不正确");
         }
+        if (register==null){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"注册信息输入不完整");
+        }
         registerMapper.insertSelective(register);
+        Bank bank = register.getBank();
         if (bank!=null){
             bank.setToken(register.getToken());
             bank.setStatus(0);
@@ -187,7 +184,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void modifyPhone(Register register) {
+    public void modifyPhone(Register register) throws NoopsycheException {
+        if (register.getSmsCode()==null){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"请输入验证码");
+        }
+        String code = (String) redisUtil.getObject("phone:" + register.getPhone());
+        if (code==null){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"请发送验证码");
+        }
+        if (!code.equals(register.getSmsCode())){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"验证码输入不正确");
+        }
         registerMapper.updateByToken(register);
     }
 
@@ -232,8 +239,8 @@ public class UserServiceImpl implements UserService {
            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"请勿重新发送验证码");
         }
         Integer num = (Integer) redisUtil.getObject("getSmsCodeTime:" + phone);
-        if (num!=null&&num>=3){
-           throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"每天只能发送一次验证码");
+        if (num!=null&&num>3){
+           throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"每天只能发送三次验证码");
         }
         sendSmsUtil.execute(phone,code+"");
         redisUtil.setObject("phone:"+phone,code+"",3L);
@@ -251,7 +258,7 @@ public class UserServiceImpl implements UserService {
     public void exchangePea(Integer score, String uuid) throws NoopsycheException {
         ExchangePea exchangePea=wxUserMapper.selectPea();
         if (exchangePea==null){
-            throw new NoopsycheException("没有兑换信息");
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"没有兑换信息");
         }
         Integer change=null;
         if (exchangePea.getStatus()==1){
@@ -261,6 +268,14 @@ public class UserServiceImpl implements UserService {
         }
         Integer pea  =score/change;
         wxUserMapper.updatePea(pea,uuid);
+    }
+
+    @Override
+    public WxUser encode(String code, String encryptedData, String iv) throws NoopsycheException {
+        if (code == null||encryptedData==null||iv==null) {
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST, "解码失败");
+        }
+        return LoginUtil.login(code,encryptedData,iv);
     }
 
     @Override

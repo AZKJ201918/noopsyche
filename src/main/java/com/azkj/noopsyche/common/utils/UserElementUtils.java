@@ -21,14 +21,14 @@ public class UserElementUtils {
     public Boolean UserElement(String token) throws NoopsycheException {
 
         if(token==null){
-            throw  new NoopsycheException("请登录");
+            throw  new NoopsycheException(401,"请登录");
         }
         WxUser wxUser= (WxUser) redisUtil.getkey(token);
         if(wxUser==null){
-            throw new NoopsycheException("请登录");
+            throw new NoopsycheException(401,"请登录");
         }
         if(userService.SelectUserElement(token)==null){
-            throw  new NoopsycheException("请登录");
+            throw  new NoopsycheException(401,"请登录");
         }
 
         return true;

@@ -8,14 +8,14 @@ import java.util.List;
 import com.azkj.noopsyche.entity.WxUser;
 
 public interface UserService {
-    String login(String code, String uuid, String encryptedData, String iv) throws NoopsycheException;
+    String login(WxUser wxUser) throws NoopsycheException;
     String login1(String openid, String uuid, String headimgurl, String nickName) throws NoopsycheException;
 
     void findRegister(String token) throws NoopsycheException;
 
-    void addRegister(Register register, Bank bank,String smsCode) throws NoopsycheException;
+    void addRegister(Register register, String smsCode) throws NoopsycheException;
 
-    void modifyPhone(Register register);
+    void modifyPhone(Register register) throws NoopsycheException;
 
     void addBank(Bank bank);
 
@@ -30,4 +30,7 @@ public interface UserService {
     void sendSmsCode(String phone) throws Exception;
 
     void exchangePea(Integer score, String uuid) throws NoopsycheException;
+
+    WxUser encode(String code, String encryptedData, String iv) throws NoopsycheException;
+
 }
