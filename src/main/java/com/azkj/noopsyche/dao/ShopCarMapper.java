@@ -11,4 +11,6 @@ public interface ShopCarMapper {
     Sku selectSkuBySkuid(String skuid);
     @Update("update commodity set status=0 where id=#{spuid}")
     int updateCommodityStatus(Integer spuid);
+    @Select("select spuid,repertory,skuprice from sku where id=#{skuId}")
+    Sku selectSkuWithPriceBySkuid(String skuId);
 }

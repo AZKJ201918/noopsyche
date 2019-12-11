@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import java.util.List;
 @Api(value = "生成购物车")
 public class ShopCarController {
     @Autowired
+    @Qualifier("shopCarServiceImpl")
     private ShopCarService shopCarService;
     @ApiOperation(value = "生成购物车",notes = "生成购物车",httpMethod = "POST")
     @ApiImplicitParam
