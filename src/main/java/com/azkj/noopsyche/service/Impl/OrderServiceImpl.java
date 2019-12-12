@@ -1,26 +1,31 @@
 package com.azkj.noopsyche.service.Impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
+import com.azkj.noopsyche.common.jms.SmsProcessor;
+import com.azkj.noopsyche.common.pay.PayUtil;
 import com.azkj.noopsyche.common.utils.DateUtil;
 import com.azkj.noopsyche.common.utils.RedisUtil;
 import com.azkj.noopsyche.dao.OrderCommodityMapper;
 import com.azkj.noopsyche.dao.OrdersMapper;
 import com.azkj.noopsyche.dao.ShopCarMapper;
+import com.azkj.noopsyche.dao.SkuMapper;
 import com.azkj.noopsyche.entity.OrderCommodity;
 import com.azkj.noopsyche.entity.Orders;
 import com.azkj.noopsyche.entity.Sku;
 import com.azkj.noopsyche.service.OrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.jms.Destination;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -32,8 +37,14 @@ public class OrderServiceImpl implements OrderService {
     private OrdersMapper ordersMapper;
     @Autowired
     private OrderCommodityMapper orderCommodityMapper;
+    @Autowired
+    private SkuMapper skuMapper;
+    @Autowired
+    private SmsProcessor smsProcessor;
+    @Autowired
+    private PayUtil payUtil;
     @Override
-    public void addOrders(Map<String, Object> dataMap) throws NoopsycheException, ParseException {
+    public void addOrders(Map<String, Object> dataMap) throws Exception {
         String token= (String) dataMap.get("token");
         String skuId= (String) dataMap.get("skuId");
         List<String> skuIds= (List<String>) dataMap.get("skuIds");
@@ -61,6 +72,7 @@ public class OrderServiceImpl implements OrderService {
             orders.setAddressid(addressId);
             orders.setCreatetime(new Date());
             orders.setToken(token);
+            orders.setPrice(totalPrice);
             orders.setFinalprice(totalPrice);
             orders.setOrderid(orderId);
             orders.setOuttime(DateUtil.plusDay2(1));
@@ -71,6 +83,12 @@ public class OrderServiceImpl implements OrderService {
             orderCommodity.setSkuid(Integer.parseInt(skuId));
             orderCommodity.setNum(number);
             orderCommodityMapper.insertSelective(orderCommodity);
+            Destination destination = new ActiveMQQueue("aaa");//通过消息队列扣除库存
+            String s="[{\"skuId\":"+skuId+",\"num\":"+number+"}]";
+            smsProcessor.sendSmsToQueue(destination,s);
+            String openid=ordersMapper.selectOpenidByToken(token);
+            BigDecimal v = totalPrice.add(new BigDecimal(100));
+            payUtil.pay(openid,"",v.longValue(),orderId);
         }
         if (skuIds!=null){//购物车生成订单
            String orderId = DateUtil.getOrderIdByTime();
@@ -81,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
                if (carNum==null){
                    throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"skuid为"+skuid+"的商品购物车不存在");
                }
-               Sku sku = shopCarMapper.selectSkuWithPriceBySkuid(skuId);
+               Sku sku = shopCarMapper.selectSkuWithPriceBySkuid(skuid);
                if (repertory==null){
                    repertory=sku.getRepertory()==null?0:sku.getRepertory();
                }
@@ -94,22 +112,42 @@ public class OrderServiceImpl implements OrderService {
                }
                OrderCommodity orderCommodity = new OrderCommodity();
                orderCommodity.setOrderid(orderId);
-               orderCommodity.setSkuid(Integer.parseInt(skuId));
-               orderCommodity.setNum(number);
+               orderCommodity.setSkuid(Integer.parseInt(skuid));
+               orderCommodity.setNum(carNum);
                orderCommodityMapper.insertSelective(orderCommodity);
                BigDecimal skuprice = sku.getSkuprice();
-               totalPrice.add(skuprice.multiply(BigDecimal.valueOf(Long.valueOf(carNum))));
+               BigDecimal multiply = skuprice.multiply(BigDecimal.valueOf(Long.valueOf(carNum)));
+               totalPrice=totalPrice.add(multiply);
            }
            //BigDecimal number1 = BigDecimal.valueOf(Long.valueOf(number));
            Orders orders = new Orders();
            orders.setAddressid(addressId);
            orders.setCreatetime(new Date());
            orders.setToken(token);
+           orders.setPrice(totalPrice);
            orders.setFinalprice(totalPrice);
            orders.setOrderid(orderId);
            orders.setOuttime(DateUtil.plusDay2(1));
            orders.setRemark(remark);
            ordersMapper.insertSelective(orders);
+           Destination destination = new ActiveMQQueue("aaa");//通过消息队列扣除库存
+           ArrayList<Object> list = new ArrayList<>();
+           HashMap<String,Object> map =null;
+           for (String skuid:skuIds){
+              map= new HashMap<>();
+              Integer carNum = (Integer) redisUtil.getHashObjectLong("shopCar:" + token, skuid);
+              if (carNum==null){
+                  continue;
+              }
+              map.put("skuId",Integer.parseInt(skuid));
+              map.put("num",carNum);
+              list.add(map);
+           }
+           String s = JSONArray.toJSONString(list);
+           smsProcessor.sendSmsToQueue(destination,s);
+           String openid=ordersMapper.selectOpenidByToken(token);
+           BigDecimal v = totalPrice.add(new BigDecimal(100));
+           payUtil.pay(openid,"",v.longValue(),orderId);
         }
     }
 
@@ -137,5 +175,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void modifyOrderToSign(Integer id) {
         ordersMapper.updateOrderToSign(id);
+    }
+
+    @Override
+    public Orders findOneOrderDetail(String orderId, Integer id) {
+        Orders orders = ordersMapper.selectByPrimaryKey(id);
+        List<OrderCommodity> orderCommodityList=orderCommodityMapper.selectByOrderId(orderId);
+        List<Sku> skuList = new ArrayList<>();
+        for (OrderCommodity orderCommodity:orderCommodityList){
+            Sku sku = skuMapper.selectByPrimaryKey(orderCommodity.getSkuid());
+            sku.setNum(orderCommodity.getNum());
+            skuList.add(sku);
+        }
+        orders.setSkuList(skuList);
+        return orders;
     }
 }

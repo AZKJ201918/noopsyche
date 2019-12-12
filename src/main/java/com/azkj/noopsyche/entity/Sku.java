@@ -26,4 +26,5 @@ public class Sku {
 
     private Integer carNum;
 
+    private Integer num;//商品购买数量
 }

@@ -16,6 +16,12 @@
     from ordercommodity
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from ordercommodity
+    where orderid=#{orderId}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from ordercommodity
     where id = #{id,jdbcType=INTEGER}

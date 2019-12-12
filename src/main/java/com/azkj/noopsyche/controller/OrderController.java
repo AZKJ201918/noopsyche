@@ -109,7 +109,7 @@ public class OrderController {
         smsProcessor.sendSmsToQueue(destination,s);*/
         try {
             orderService.removeOrder(id);
-            result.setMessage("取消订单成功");
+            result.setMessage("删除订单成功");
         } catch (Exception e) {
             e.printStackTrace();
             result.setMessage("后台服务器异常");
@@ -128,6 +128,24 @@ public class OrderController {
         try {
             orderService.modifyOrderToSign(id);
             result.setMessage("签收订单成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看订单详情",notes = "查看订单详情",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/loadOrderDetail")
+    public ApiResult<PageInfo<Orders>> loadOrderDetail(String orderId,Integer id){
+        ApiResult<PageInfo<Orders>> result = new ApiResult<>();
+        /*Destination destination = new ActiveMQQueue("aaa");
+        String s = JSON.toJSONString(dataMap);
+        smsProcessor.sendSmsToQueue(destination,s);*/
+        try {
+            Orders order= orderService.findOneOrderDetail(orderId,id);
+            result.setMessage("查看订单详情成功");
         } catch (Exception e) {
             e.printStackTrace();
             result.setMessage("后台服务器异常");

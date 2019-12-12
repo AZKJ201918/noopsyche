@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.util.Map;
 
 public interface OrderService {
-    void addOrders(Map<String, Object> dataMap) throws NoopsycheException, ParseException;
+    void addOrders(Map<String, Object> dataMap) throws Exception;
 
     PageInfo<Orders> findAllOrder(Integer page, Integer limit, Orders orders) throws NoopsycheException;
 
@@ -17,4 +17,6 @@ public interface OrderService {
     void removeOrder(Integer id);
 
     void modifyOrderToSign(Integer id);
+
+    Orders findOneOrderDetail(String orderId, Integer id);
 }
