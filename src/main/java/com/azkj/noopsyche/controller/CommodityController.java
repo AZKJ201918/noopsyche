@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 @Api(value = "商品模块")
 public class CommodityController {
     @Autowired
+    @Qualifier("commodityServiceImpl")
     private CommodityService commodityService;
     @ApiOperation(value = "查看商品", notes = "查看商品", httpMethod = "POST")
     @ApiImplicitParam

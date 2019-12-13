@@ -9,7 +9,6 @@
     </settings>
 
     <typeAliases>
-        <package name="com.yunding.business"/>
-        <package name="com.yunding.task"/>
+        <package name="com.azkj.noopsyche.entity"/>
     </typeAliases>
 </configuration>

@@ -31,7 +31,7 @@
     id, licenseurl, identityjusturl, identitycontraryurl, phone, mailbox, permiturl, 
     bankidurl, cobaurl, interiorurl, receptionurl, corporationidentityjusturl, corporationidentitycontraryurl, 
     accountidentityjusturl, accountidentitycontraryurl, relationurl, type, accounttype, 
-    status, token, createtime,`explain`,mininame
+    status, token, createtime, `explain`,mininame
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -44,7 +44,7 @@
     select
     <include refid="Base_Column_List" />
     from datum
-    where token = #{token,jdbcType=VARCHAR}
+    where token = #{token}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
