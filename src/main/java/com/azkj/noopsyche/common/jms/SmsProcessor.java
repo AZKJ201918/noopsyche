@@ -12,6 +12,7 @@ import com.azkj.noopsyche.dao.SkuMapper;
 import com.azkj.noopsyche.entity.Sku;
 import com.azkj.noopsyche.service.Impl.OrderServiceImpl;
 import com.azkj.noopsyche.service.OrderService;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.annotation.JmsListener;
@@ -37,7 +38,7 @@ public class SmsProcessor {
 
     @Autowired
     @Qualifier("orderServiceImpl")
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
     public void sendSmsToQueue(Destination destination, String message) {
         jmsMessagingTemplate.convertAndSend(destination,message);
     }

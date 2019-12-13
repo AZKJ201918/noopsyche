@@ -1,5 +1,5 @@
 server:
-  port: 888
+  port: 717
 
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml

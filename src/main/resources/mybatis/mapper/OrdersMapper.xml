@@ -18,10 +18,11 @@
     <result column="company" property="company" jdbcType="VARCHAR" />
     <result column="courier" property="courier" jdbcType="VARCHAR" />
     <result column="paytime" property="paytime" jdbcType="TIMESTAMP" />
+    <result column="couponid" property="couponid" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, orderid, token, price, finalprice, status, addressid, remark, createtime, outtime, 
-    sendtime, recievetime, recieveouttime, company, courier, paytime
+    sendtime, recievetime, recieveouttime, company, courier, paytime,couponid
   </sql>
   <sql id="Base_Column_List1" >
     id, orderid, token, price, finalprice, status, addressid, remark,createtime
@@ -52,13 +53,13 @@
       addressid, remark, createtime, 
       outtime, sendtime, recievetime, 
       recieveouttime, company, courier, 
-      paytime)
+      paytime,couponid)
     values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, 
       #{price,jdbcType=DECIMAL}, #{finalprice,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
       #{addressid,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{outtime,jdbcType=TIMESTAMP}, #{sendtime,jdbcType=TIMESTAMP}, #{recievetime,jdbcType=TIMESTAMP}, 
       #{recieveouttime,jdbcType=TIMESTAMP}, #{company,jdbcType=VARCHAR}, #{courier,jdbcType=VARCHAR}, 
-      #{paytime,jdbcType=TIMESTAMP})
+      #{paytime,jdbcType=TIMESTAMP},#{couponid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.azkj.noopsyche.entity.Orders" >
     insert into orders
@@ -111,6 +112,9 @@
       <if test="paytime != null" >
         paytime,
       </if>
+      <if test="couponid != null" >
+        couponid
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -160,6 +164,9 @@
       </if>
       <if test="paytime != null" >
         #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="couponid != null" >
+        #{couponid,jdbcType=INTEGER}
       </if>
     </trim>
   </insert>
@@ -211,6 +218,9 @@
       <if test="paytime != null" >
         paytime = #{paytime,jdbcType=TIMESTAMP},
       </if>
+      <if test="couponid != null" >
+        couponid = #{couponid,jdbcType=INTEGER}
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -230,7 +240,8 @@
       recieveouttime = #{recieveouttime,jdbcType=TIMESTAMP},
       company = #{company,jdbcType=VARCHAR},
       courier = #{courier,jdbcType=VARCHAR},
-      paytime = #{paytime,jdbcType=TIMESTAMP}
+      paytime = #{paytime,jdbcType=TIMESTAMP},
+      couponid = #{couponid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

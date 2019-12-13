@@ -6,7 +6,9 @@ import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.jms.SmsProcessor;
 import com.azkj.noopsyche.common.resp.ApiResult;
 import com.azkj.noopsyche.entity.Orders;
+import com.azkj.noopsyche.entity.UserCoupon;
 import com.azkj.noopsyche.service.OrderService;
+import com.azkj.noopsyche.service.UserCouponService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,7 +37,9 @@ public class OrderController {
     @Autowired
     @Qualifier("orderServiceImpl")
     private OrderService orderService;
-
+    @Autowired
+    @Qualifier("userCouponServiceImpl")
+    private UserCouponService userCouponService;
     @ApiOperation(value = "生成订单",notes = "生成订单",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/createOrderInLine")
@@ -146,6 +150,29 @@ public class OrderController {
         try {
             Orders order= orderService.findOneOrderDetail(orderId,id);
             result.setMessage("查看订单详情成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看用户未过期优惠券信息",notes = "查看未过期优惠券信息",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/loadCoupon")
+    public ApiResult loadCoupon(String token){
+        ApiResult result = new ApiResult<>();
+        /*Destination destination = new ActiveMQQueue("aaa");
+        String s = JSON.toJSONString(dataMap);
+        smsProcessor.sendSmsToQueue(destination,s);*/
+        try {
+            List<UserCoupon> userCouponList= userCouponService.findAllCoupon(token);
+            result.setMessage("查看未过期优惠券成功");
+            result.setData(userCouponList);
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
         } catch (Exception e) {
             e.printStackTrace();
             result.setMessage("后台服务器异常");

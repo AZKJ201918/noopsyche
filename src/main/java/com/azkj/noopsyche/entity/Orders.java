@@ -41,4 +41,6 @@ public class Orders {
     private Date paytime;
 
     private List<Sku> skuList;
+
+    private Integer couponid;
 }
