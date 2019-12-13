@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 @Data
 public class WxUser implements Serializable {
+
     private String token;
 
     private String openid;

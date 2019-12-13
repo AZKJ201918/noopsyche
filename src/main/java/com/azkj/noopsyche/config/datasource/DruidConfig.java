@@ -3,6 +3,9 @@ package com.azkj.noopsyche.config.datasource;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.config.HttpClientConfig;
+import io.searchbox.client.http.JestHttpClient;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -48,4 +51,15 @@ public class DruidConfig {
         return filterRegistrationBean;
     }
 
+    @Bean
+    public JestHttpClient getECSlient() {
+        JestClientFactory factory = new JestClientFactory();
+        factory.setHttpClientConfig(new HttpClientConfig.Builder(
+                "http://106.14.195.35:9200")
+                .multiThreaded(true)
+                .readTimeout(5000)
+                .build());
+        JestHttpClient client = (JestHttpClient) factory.getObject();
+        return client;
+    }
 }

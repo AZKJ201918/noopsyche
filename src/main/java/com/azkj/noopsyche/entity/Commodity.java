@@ -2,14 +2,20 @@ package com.azkj.noopsyche.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.apache.lucene.document.FieldType;
+import org.jboss.logging.Field;
+
 
 import java.util.Date;
 
 @Data
 public class Commodity {
+
+
     private Integer id;
 
     private String title;
+
 
     private String subtitle;
 

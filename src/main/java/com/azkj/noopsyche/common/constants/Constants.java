@@ -99,6 +99,8 @@ public class Constants {
     public static final String grant_type ="authorization_code";
 
 
+    public static final String ES_HOST ="106.14.195.35:9200" ;
+
 
 
     public static final String MDSMS_ACCOUNT_SID = "e781734be145420bb4c23fe2b3c89649";
