@@ -61,6 +61,7 @@ public class MiniServiceImpl implements MiniService {
         String terminal_trace= DateUtil.getOrderIdByTime();
         miniOrder.setOrderid(terminal_trace);
         miniOrder.setCreatetime(new Date());
+        miniOrder.setToken(wxUser.getToken());
         miniOrder.setEndtime(DateUtil.plusDay2(1));
         miniOrderMapper.insertSelective(miniOrder);
         Map<String,String> map= payUtil.pay(wxUser.getOpenid(),"",mini.getPrice(),terminal_trace);

@@ -31,4 +31,6 @@ public class NoopsycheApplication extends Throwable {
 		HttpMessageConverter<?> converter = fastJsonHttpMessageConverter;
 		return new HttpMessageConverters(converter);
 	}
+
+
 }
