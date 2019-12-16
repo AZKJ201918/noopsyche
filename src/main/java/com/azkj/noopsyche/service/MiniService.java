@@ -16,4 +16,6 @@ public interface MiniService {
     Map<String,String> purchaseMini(MiniOrder miniOrder) throws Exception;
 
     void mininotifyurl(String notityXml) throws Exception;
+
+    Map<String,String> testpay(String token, Long price) throws Exception;
 }

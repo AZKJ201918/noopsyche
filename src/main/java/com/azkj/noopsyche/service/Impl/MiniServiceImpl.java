@@ -86,4 +86,12 @@ public class MiniServiceImpl implements MiniService {
         }
 
     }
+
+    @Override
+    public Map<String, String> testpay(String token, Long price) throws Exception {
+        WxUser wxUser=wxUserMapper.selectByPrimaryKey(token);
+        String terminal_trace= DateUtil.getOrderIdByTime();
+        Map<String,String> map= payUtil.pay(wxUser.getOpenid(),"",price,terminal_trace);
+        return map;
+    }
 }

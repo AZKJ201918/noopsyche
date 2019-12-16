@@ -121,6 +121,28 @@ public class MiniController {
         return map;
     }
 
+
+    @ApiOperation(value = "测试",notes = "测试",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/testpay")
+    public ApiResult<Map<String,String>> test(String token,Long price) {
+        ApiResult<Map<String,String>> result=new ApiResult();
+        try {
+            Map<String,String> map=miniService.testpay(token,price);
+            result.setData(map);
+            result.setMessage("测试");
+        } catch (NoopsycheException e) {
+            result.setCode(e.getStatusCode());
+            result.setMessage(e.getMessage());
+        } catch (Exception e) {
+            log.error("SQL statement error or that place is empty" + e);
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+            result.setMessage("内部错误");
+        }
+        return result;
     }
+
+
+}
 
 
