@@ -4,6 +4,7 @@ import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.resp.ApiResult;
 import com.azkj.noopsyche.entity.Commodity;
+import com.azkj.noopsyche.entity.Sku;
 import com.azkj.noopsyche.service.CommodityService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -53,6 +54,27 @@ public class CommodityController {
             Commodity commodity= commodityService.findAllCommodityDetail(id);
             result.setMessage("查看商品详情成功");
             result.setData(commodity);
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "检索商品", notes = "检索商品", httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/searchCommodity")
+    public ApiResult searchCommodity(String skuname){
+        ApiResult<Sku> result = new ApiResult<>();
+        try {
+            Sku sku= commodityService.searchCommodity(skuname);
+            result.setMessage("检索商品成功");
+            result.setData(sku);
         } catch (NoopsycheException e) {
             e.printStackTrace();
             result.setMessage(e.getMessage());

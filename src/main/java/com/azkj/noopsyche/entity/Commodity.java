@@ -7,6 +7,7 @@ import org.jboss.logging.Field;
 
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Commodity {
@@ -36,4 +37,6 @@ public class Commodity {
     private Date createtime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GTM+8")
     private Date updatetime;
+
+    List<Property> propertyList;
 }
