@@ -2,8 +2,10 @@ package com.azkj.noopsyche.service;
 
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.entity.Bank;
+import com.azkj.noopsyche.entity.Coupon;
 import com.azkj.noopsyche.entity.Register;
 
+import java.text.ParseException;
 import java.util.List;
 import com.azkj.noopsyche.entity.WxUser;
 
@@ -31,6 +33,11 @@ public interface UserService {
 
     void exchangePea(Integer score, String uuid) throws NoopsycheException;
 
-    WxUser encode(String code, String encryptedData, String iv) throws NoopsycheException;
+    WxUser encode(String code, String encryptedData, String iv, String uuid) throws NoopsycheException;
 
+    List<Coupon> findAllNewCoupon() throws NoopsycheException;
+
+    void addNewCoupon(String token, List<Integer> couponids) throws ParseException;
+
+    List<Coupon> findAllCoupon() throws NoopsycheException;
 }

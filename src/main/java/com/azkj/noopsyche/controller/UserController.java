@@ -8,6 +8,7 @@ import com.azkj.noopsyche.common.utils.DateUtil;
 import com.azkj.noopsyche.common.utils.RedisUtil;
 import com.azkj.noopsyche.common.utils.sm.sendSmsUtil;
 import com.azkj.noopsyche.entity.Bank;
+import com.azkj.noopsyche.entity.Coupon;
 import com.azkj.noopsyche.entity.Register;
 import com.azkj.noopsyche.entity.WxUser;
 import com.azkj.noopsyche.service.UserService;
@@ -28,6 +29,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.azkj.noopsyche.common.constants.Constants.token;
+
 
 @RestController
 @CrossOrigin
@@ -41,7 +44,7 @@ public class UserController {
 
 
 
-    @ApiOperation(value = "用户授权", notes = "用户登录", httpMethod = "POST")
+  /*  @ApiOperation(value = "用户授权", notes = "用户登录", httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/user")
     public ApiResult user(WxUser wxUser) {
@@ -54,24 +57,26 @@ public class UserController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e) {
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
         return result;
-    }
-    @ApiOperation(value = "解码", notes = "解码", httpMethod = "POST")
+    }*/
+    @ApiOperation(value = "登录", notes = "登录", httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/encode")
-    public ApiResult encode(String code, String encryptedData, String iv) {
+    public ApiResult encode(String code, String encryptedData, String iv,String uuid) {
         ApiResult<Object> result = new ApiResult<>();
         try {
-            WxUser wxUser=userService.encode(code,encryptedData,iv);
-            result.setData(wxUser);
+            WxUser user = userService.encode(code, encryptedData, iv, uuid);
+            result.setData(user);
             result.setMessage("登录成功");
         } catch (NoopsycheException e) {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e) {
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -90,7 +95,7 @@ public class UserController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -109,7 +114,7 @@ public class UserController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -124,7 +129,7 @@ public class UserController {
             userService.addRegister(register,smsCode);
             result.setMessage("注册成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -143,7 +148,7 @@ public class UserController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -158,7 +163,7 @@ public class UserController {
             userService.addBank(bank);
             result.setMessage("新增银行卡成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -178,7 +183,7 @@ public class UserController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -193,7 +198,7 @@ public class UserController {
             userService.removeBank(bank);
             result.setMessage("删除银行卡成功");
         }catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -208,7 +213,7 @@ public class UserController {
             userService.modifyBank(bank);
             result.setMessage("修改为默认银行卡成功");
         }catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -226,7 +231,68 @@ public class UserController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e) {
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看所有使用中的新人优惠劵",notes = "查看新人优惠劵",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/loadNewCoupon")
+    public ApiResult loadNewCoupon(){
+        ApiResult<Object> result = null;
+        try {
+            result = new ApiResult<>();
+            List<Coupon> couponList=userService.findAllNewCoupon();
+            result.setMessage("查看新人优惠劵成功");
+            result.setData(couponList);
+        } catch (NoopsycheException e) {
             e.printStackTrace();
+            result.setCode(e.getStatusCode());
+            result.setMessage(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "领取新人优惠劵",notes = "领取新人优惠劵",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/getNewCoupon")
+    public ApiResult getNewCoupon(String token,@RequestBody List<Integer> couponids){
+        ApiResult<Object> result = null;
+        try {
+            result = new ApiResult<>();
+            userService.addNewCoupon(token,couponids);
+            result.setMessage("领取新人优惠劵成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看所有使用中的非新人优惠劵",notes = "查看非新人优惠劵",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/loadCoupon")
+    public ApiResult loadCoupon(){
+        ApiResult<Object> result = null;
+        try {
+            result = new ApiResult<>();
+            List<Coupon> couponList=userService.findAllCoupon();
+            result.setMessage("查看非新人优惠劵成功");
+            result.setData(couponList);
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setCode(e.getStatusCode());
+            result.setMessage(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }

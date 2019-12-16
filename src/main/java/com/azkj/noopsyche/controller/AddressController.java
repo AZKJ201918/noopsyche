@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @Slf4j
-@Api(value = "地址模块")
+@Api(value = "地址模块")//地址模块测试完毕
 public class AddressController {
     @Autowired
     @Qualifier("addressServiceImpl")
@@ -34,6 +34,7 @@ public class AddressController {
             result.setMessage("地址新增成功");
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -46,9 +47,9 @@ public class AddressController {
         ApiResult<Object> result = new ApiResult<>();
         try {
             addressService.modifyAddress(address);
-            result.setMessage("地址新增成功");
+            result.setMessage("地址修改成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -68,7 +69,7 @@ public class AddressController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -84,6 +85,7 @@ public class AddressController {
             result.setMessage("地址删除成功");
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }

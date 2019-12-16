@@ -20,6 +20,6 @@ public interface PropertyMapper {
 
     int updateByPrimaryKey(Property record);
 
-    @Select("SELECT id,propertyname FROM property where id=#{id}")
+    @Select("SELECT id,propertyname FROM property where spuid=#{id}")
     List<Property> selectByPropertyAll(Integer id);
 }

@@ -7,18 +7,14 @@ import com.azkj.noopsyche.common.utils.LoginUtil;
 import com.azkj.noopsyche.common.utils.RedisUtil;
 import com.azkj.noopsyche.common.utils.UUIDUtils;
 import com.azkj.noopsyche.common.utils.sm.sendSmsUtil;
-import com.azkj.noopsyche.dao.BankMapper;
-import com.azkj.noopsyche.dao.RegisterMapper;
-import com.azkj.noopsyche.dao.WxUserMapper;
-import com.azkj.noopsyche.entity.Bank;
-import com.azkj.noopsyche.entity.ExchangePea;
-import com.azkj.noopsyche.entity.Register;
-import com.azkj.noopsyche.entity.WxUser;
+import com.azkj.noopsyche.dao.*;
+import com.azkj.noopsyche.entity.*;
 import com.azkj.noopsyche.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +31,12 @@ public class UserServiceImpl implements UserService {
     private RegisterMapper registerMapper;
     @Autowired
     private BankMapper bankMapper;
-
+    @Autowired
+    private LoginUtil loginUtil;
+    @Autowired
+    private CouponMapper couponMapper;
+    @Autowired
+    private UserCouponMapper userCouponMapper;
 
     private static AtomicInteger registerCount = new AtomicInteger(0);
 
@@ -271,11 +272,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public WxUser encode(String code, String encryptedData, String iv) throws NoopsycheException {
+    public WxUser encode(String code, String encryptedData, String iv, String uuid) throws NoopsycheException {
         if (code == null||encryptedData==null||iv==null) {
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST, "解码失败");
         }
-        return LoginUtil.login(code,encryptedData,iv);
+        WxUser user = loginUtil.login(code, encryptedData, iv, uuid);
+        return user;
+    }
+
+    @Override
+    public List<Coupon> findAllNewCoupon() throws NoopsycheException {
+        List<Coupon> couponList = wxUserMapper.selectAllNewCoupon();
+        if (couponList==null){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"暂无新人优惠");
+        }
+        return couponList;
+    }
+
+    @Override
+    public void addNewCoupon(String token, List<Integer> couponids) throws ParseException {
+        UserCoupon userCoupon = new UserCoupon();
+        for (Integer couponid:couponids){
+            Integer day=wxUserMapper.selectOutDayByCouponid(couponid);
+            userCoupon.setToken(token);
+            userCoupon.setCouponid(couponid);
+            userCoupon.setRecievetime(new Date());
+            if (day!=null){
+                userCoupon.setOuttime(DateUtil.plusDay2(day));
+            }
+            userCouponMapper.insertSelective(userCoupon);
+        }
+    }
+
+    @Override
+    public List<Coupon> findAllCoupon() throws NoopsycheException {
+        List<Coupon> couponList = wxUserMapper.selectAllCoupon();
+        if (couponList==null){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"未找到非新人优惠劵信息");
+        }
+        return wxUserMapper.selectAllCoupon();
     }
 
     @Override

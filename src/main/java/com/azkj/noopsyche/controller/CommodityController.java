@@ -40,6 +40,7 @@ public class CommodityController {
             result.setCode(e.getStatusCode());
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -59,6 +60,7 @@ public class CommodityController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         } catch (Exception e) {
+            log.error("SQL statement error or that place is empty" + e);
             e.printStackTrace();
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);

@@ -56,7 +56,7 @@ public class OrderController {
             result.setMessage(e.getMessage());
             result.setData(e.getStatusCode());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -79,7 +79,7 @@ public class OrderController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -97,7 +97,7 @@ public class OrderController {
             orderService.modifyOrder(orderId);
             result.setMessage("取消订单成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -115,7 +115,7 @@ public class OrderController {
             orderService.removeOrder(id);
             result.setMessage("删除订单成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -133,7 +133,7 @@ public class OrderController {
             orderService.modifyOrderToSign(id);
             result.setMessage("签收订单成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -151,7 +151,7 @@ public class OrderController {
             Orders order= orderService.findOneOrderDetail(orderId,id);
             result.setMessage("查看订单详情成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -174,7 +174,7 @@ public class OrderController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }

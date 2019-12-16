@@ -32,4 +32,6 @@ public class WxUser implements Serializable {
 
     private Date createtime;
 
+    private boolean islogin; //是否首次登录
+
 }

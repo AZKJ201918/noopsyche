@@ -29,7 +29,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void modifyAddress(Address address) {
-        if (address.getStatus()==0){
+        if (address!=null&&address.getStatus()==0){
            addressMapper.updateToFeiMoren(address.getToken());
         }
         addressMapper.updateByPrimaryKeySelective(address);
