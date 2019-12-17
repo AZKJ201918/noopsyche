@@ -2,18 +2,19 @@ package com.azkj.noopsyche.service.Impl;
 
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
-import com.azkj.noopsyche.common.utils.DateUtil;
-import com.azkj.noopsyche.common.utils.LoginUtil;
-import com.azkj.noopsyche.common.utils.RedisUtil;
-import com.azkj.noopsyche.common.utils.UUIDUtils;
+import com.azkj.noopsyche.common.pay.PayUtil;
+import com.azkj.noopsyche.common.utils.*;
 import com.azkj.noopsyche.common.utils.sm.sendSmsUtil;
 import com.azkj.noopsyche.dao.*;
 import com.azkj.noopsyche.entity.*;
 import com.azkj.noopsyche.service.UserService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,6 +38,8 @@ public class UserServiceImpl implements UserService {
     private CouponMapper couponMapper;
     @Autowired
     private UserCouponMapper userCouponMapper;
+    @Autowired
+    private PayUtil payUtil;
 
     private static AtomicInteger registerCount = new AtomicInteger(0);
 
@@ -273,7 +276,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public WxUser encode(String code, String encryptedData, String iv, String uuid) throws NoopsycheException {
-        if (code == null||encryptedData==null||iv==null) {
+        if (code == null) {
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST, "解码失败");
         }
         WxUser user = loginUtil.login(code, encryptedData, iv, uuid);
@@ -311,6 +314,71 @@ public class UserServiceImpl implements UserService {
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"未找到非新人优惠劵信息");
         }
         return wxUserMapper.selectAllCoupon();
+    }
+
+    @Override
+    @Transactional
+    public void addCoupon(List<UserCoupon> userCouponList) throws NoopsycheException {
+        BigDecimal money=new BigDecimal("0");
+        BigDecimal integral=new BigDecimal("0");
+        Integer pea=0;
+        String token=null;
+        Coupon coupon=null;
+        for (UserCoupon userCoupon:userCouponList){
+            token=userCoupon.getToken();
+            Integer couponid = userCoupon.getCouponid();
+            Integer num = userCoupon.getNum();
+            coupon = couponMapper.selectByPrimaryKey(couponid);
+            if (coupon==null){
+                throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"id为"+couponid+"的优惠劵不存在");
+            }
+            Integer status = coupon.getStatus();
+            BigDecimal needIntegral= coupon.getIntegral();
+            BigDecimal needMoney = coupon.getMoney();
+            Integer needPea = coupon.getPea();
+            if (status==1){
+                money=money.add(needMoney);
+            }
+            if (status==2){
+                integral=integral.add(needIntegral);
+                userCouponMapper.insertSelective(userCoupon);
+            }
+            if (status==3){
+                pea+=needPea;
+                userCouponMapper.insertSelective(userCoupon);
+            }
+            if (status==4){
+               integral=integral.add(needIntegral);
+               money=money.add(needMoney);
+            }
+        }
+        WxUser user=wxUserMapper.selectIntegralAndPea(token);
+        BigDecimal myIntegral = user.getIntegral();
+        Integer myPea = user.getPea();
+        if (pea>myPea){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"臻豆不足无法兑换");
+        }
+        if (integral.compareTo(myIntegral)>0){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"积分不足无法兑换");
+        }
+        if (integral.compareTo(new BigDecimal("0"))>0){
+            wxUserMapper.updateIntegral(integral,token);
+        }
+        if (pea!=0){
+            wxUserMapper.updatePeaJian(pea,token);
+        }
+
+    }
+
+    @Override
+    public PageInfo<WxUser> findNext(String token, Integer page, Integer limit) throws NoopsycheException {
+        PageHelper.startPage(page,limit);
+        List<WxUser> wxUserList = wxUserMapper.selectNext(token);
+        if (wxUserList==null){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"没有下级下级信息");
+        }
+        PageInfo<WxUser> pageInfo = new PageInfo<>(wxUserList);
+        return pageInfo;
     }
 
     @Override

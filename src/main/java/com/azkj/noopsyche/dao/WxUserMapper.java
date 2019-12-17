@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
@@ -37,4 +38,14 @@ public interface WxUserMapper {
     Integer selectOutDayByCouponid(Integer couponid);
     @Select("select id,type,subtract,discount,fullsubtract,fulls,fulldiscount,fulld,day,money,integral,pea,status from coupon where outtime>now() or outtime is null and `use`=1 and status!=0")
     List<Coupon> selectAllCoupon();
+    @Select("select integral,pea from wxuser where token=#{token}")
+    WxUser selectIntegralAndPea(String token);
+    @Update("update wxuser set integral=integral-#{integral} where token=#{token}")
+    int updateIntegral(@Param("integral") BigDecimal integral,@Param("token") String token);
+    @Update("update wxuser set pea=pea-#{pea} where token=#{token}")
+    int updatePeaJian(@Param("pea") Integer pea,@Param("token") String token);
+    @Select("select token from wxuser where token=#{uuid}")
+    String selectToken(String uuid);
+    @Select("select nickname,headimgurl from wxuser where uuid=#{token}")
+    List<WxUser> selectNext(String token);
 }

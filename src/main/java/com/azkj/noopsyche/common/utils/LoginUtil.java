@@ -65,10 +65,13 @@ public class LoginUtil {
                 user.setIslogin(false);
                 if (uuid != null) {//有分享人
                     String mySuperiorid = wxUserMapper.selectSuperioridByOpenid(openid);
+                    String fuToken=wxUserMapper.selectToken(uuid);
                     if (mySuperiorid == null) {//没有父id
-                        if (!userUUID.equals(uuid)) {//自己不是自己的分享人
-                            user.setUuid(uuid);
-                            wxUserMapper.updateByPrimaryKeySelective(user);
+                        if (fuToken!=null){//项目中有上级信息
+                            if (!userUUID.equals(uuid)) {//自己不是自己的分享人
+                                user.setUuid(uuid);
+                                wxUserMapper.updateByPrimaryKeySelective(user);
+                            }
                         }
                     }
                 }
@@ -84,10 +87,16 @@ public class LoginUtil {
                 }
                 redisUtil.setObject("uuid:"+userUUID,user,15L);
             } else {//用户没有初始化
+                if (encryptedData==null||iv==null){
+                    throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"没有解码信息");
+                }
                 userUUID = UUIDUtils.generateMost22UUID();//用户id
                 user.setToken(userUUID);
                 if (uuid != null) {//有分享人
-                    user.setUuid(uuid);
+                    String fuToken=wxUserMapper.selectToken(uuid);
+                    if (fuToken!=null){//分享人存在
+                        user.setUuid(uuid);
+                    }
                 }
                 String session_key = "";
                 session_key = tempMap.get("session_key").toString();

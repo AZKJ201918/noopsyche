@@ -7,11 +7,9 @@ import com.azkj.noopsyche.common.resp.ApiResult;
 import com.azkj.noopsyche.common.utils.DateUtil;
 import com.azkj.noopsyche.common.utils.RedisUtil;
 import com.azkj.noopsyche.common.utils.sm.sendSmsUtil;
-import com.azkj.noopsyche.entity.Bank;
-import com.azkj.noopsyche.entity.Coupon;
-import com.azkj.noopsyche.entity.Register;
-import com.azkj.noopsyche.entity.WxUser;
+import com.azkj.noopsyche.entity.*;
 import com.azkj.noopsyche.service.UserService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -65,18 +63,20 @@ public class UserController {
     }*/
     @ApiOperation(value = "登录", notes = "登录", httpMethod = "POST")
     @ApiImplicitParam
-    @PostMapping("/encode")
-    public ApiResult encode(String code, String encryptedData, String iv,String uuid) {
-        ApiResult<Object> result = new ApiResult<>();
+    @PostMapping("/login")
+    public ApiResult login(String code, String encryptedData, String iv,String uuid) {
+        ApiResult<WxUser> result = new ApiResult<>();
         try {
             WxUser user = userService.encode(code, encryptedData, iv, uuid);
             result.setData(user);
             result.setMessage("登录成功");
         } catch (NoopsycheException e) {
+            e.printStackTrace();
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e) {
             log.error("SQL statement error or that place is empty" + e);
+            e.printStackTrace();
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -291,6 +291,44 @@ public class UserController {
             result.setCode(e.getStatusCode());
             result.setMessage(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "兑换优惠劵",notes = "兑换优惠劵",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/getCoupon")
+    public ApiResult getCoupon(@RequestBody List<UserCoupon> userCouponList){
+        ApiResult<Object> result = null;
+        try {
+            result = new ApiResult<>();
+            userService.addCoupon(userCouponList);
+            result.setMessage("兑换优惠劵成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看下级",notes = "查看下级",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/loadNext")
+    public ApiResult loadNext(String token,Integer page,Integer limit){
+        ApiResult<PageInfo<WxUser>> result = new ApiResult<>();
+        try {
+            PageInfo<WxUser> pageInfo = userService.findNext(token, page, limit);
+            result.setMessage("查看下级成功");
+            result.setData(pageInfo);
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
+        } catch (Exception e){
             e.printStackTrace();
             log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");

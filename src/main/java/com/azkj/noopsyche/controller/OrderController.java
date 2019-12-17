@@ -159,8 +159,8 @@ public class OrderController {
     }
     @ApiOperation(value = "查看用户未过期优惠券信息",notes = "查看未过期优惠券信息",httpMethod = "POST")
     @ApiImplicitParam
-    @PostMapping("/loadCoupon")
-    public ApiResult loadCoupon(String token){
+    @PostMapping("/loadUserCoupon")
+    public ApiResult loadUserCoupon(String token){
         ApiResult result = new ApiResult<>();
         /*Destination destination = new ActiveMQQueue("aaa");
         String s = JSON.toJSONString(dataMap);

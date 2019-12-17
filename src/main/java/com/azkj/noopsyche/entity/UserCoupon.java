@@ -17,5 +17,6 @@ public class UserCoupon {
 
     private Coupon coupon;
 
+    private Integer num;//购买的数量
 
 }

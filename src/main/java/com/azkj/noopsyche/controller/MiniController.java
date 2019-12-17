@@ -116,10 +116,12 @@ public class MiniController {
             map.put("return_msg","回调成功");
         } catch (Exception e) {
             log.error("SQL statement error or that place is empty" + e);
-
         }
         return map;
     }
+
+
+
 
     }
 
