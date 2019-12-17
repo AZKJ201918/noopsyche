@@ -94,7 +94,7 @@
       <if test="headimgurl != null" >
         #{headimgurl,jdbcType=VARCHAR},
       </if>
-      <if test="phone != null" >
+      <if test="pea != null" >
         #{pea,jdbcType=INTEGER},
       </if>
       <if test="uuid != null" >

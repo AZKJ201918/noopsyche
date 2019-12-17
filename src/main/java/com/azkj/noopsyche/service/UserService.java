@@ -1,13 +1,11 @@
 package com.azkj.noopsyche.service;
 
 import com.azkj.noopsyche.common.exception.NoopsycheException;
-import com.azkj.noopsyche.entity.Bank;
-import com.azkj.noopsyche.entity.Coupon;
-import com.azkj.noopsyche.entity.Register;
+import com.azkj.noopsyche.entity.*;
+import com.github.pagehelper.PageInfo;
 
 import java.text.ParseException;
 import java.util.List;
-import com.azkj.noopsyche.entity.WxUser;
 
 public interface UserService {
     String login(WxUser wxUser) throws NoopsycheException;
@@ -40,4 +38,8 @@ public interface UserService {
     void addNewCoupon(String token, List<Integer> couponids) throws ParseException;
 
     List<Coupon> findAllCoupon() throws NoopsycheException;
+
+    void addCoupon(List<UserCoupon> userCouponList) throws NoopsycheException;
+
+    PageInfo<WxUser> findNext(String token, Integer page, Integer limit) throws NoopsycheException;
 }
