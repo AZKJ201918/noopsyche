@@ -2,6 +2,7 @@ package com.azkj.noopsyche.service.Impl;
 
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
+import com.azkj.noopsyche.common.utils.SearchUtils;
 import com.azkj.noopsyche.dao.CommodityMapper;
 import com.azkj.noopsyche.dao.ProductMapper;
 import com.azkj.noopsyche.dao.PropertyMapper;
@@ -15,6 +16,7 @@ import io.searchbox.client.http.JestHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +31,8 @@ public class CommodityServiceImpl implements CommodityService {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private SearchUtils searchUtils;
 
     @Override
     public PageInfo<Commodity> findAllCommodity(Integer page, Integer limit, Integer flag) throws NoopsycheException {
@@ -56,12 +60,11 @@ public class CommodityServiceImpl implements CommodityService {
                 }
         );
         commodity.setPropertyList(propertyList);
-
         return commodity;
     }
 
     @Override
-    public Sku searchCommodity(String skuname) throws NoopsycheException {
-        return null;
+    public Sku searchCommodity(String skuname) throws NoopsycheException, IOException {
+        return searchUtils.SearchSku(skuname);
     }
 }

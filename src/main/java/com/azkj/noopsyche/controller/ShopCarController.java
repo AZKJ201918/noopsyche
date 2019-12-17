@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @CrossOrigin
-@Api(value = "生成购物车")
+@Api(value = "生成购物车")//已测试
 public class ShopCarController {
     @Autowired
     @Qualifier("shopCarServiceImpl")
@@ -39,7 +39,7 @@ public class ShopCarController {
           result.setMessage(e.getMessage());
           result.setCode(e.getStatusCode());
         }catch (Exception e){
-          e.printStackTrace();
+          log.error("SQL statement error or that place is empty" + e);
           result.setMessage("后台服务器异常");
           result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -58,7 +58,7 @@ public class ShopCarController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -78,7 +78,7 @@ public class ShopCarController {
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
@@ -93,7 +93,7 @@ public class ShopCarController {
             shopCarService.removeShopCar(token,id);
             result.setMessage("删除购物车成功");
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }

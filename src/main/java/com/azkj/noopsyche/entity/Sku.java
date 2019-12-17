@@ -24,6 +24,11 @@ public class Sku {
 
     private Integer repertory;
 
+    private Integer isintegral;
+
+    private Integer use;
+
     private Integer carNum;
 
+    private Integer num;//商品购买数量
 }

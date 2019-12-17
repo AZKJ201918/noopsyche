@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.azkj.noopsyche.dao.CouponMapper" >
+  <resultMap id="BaseResultMap" type="com.azkj.noopsyche.entity.Coupon" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="subtract" property="subtract" jdbcType="DECIMAL" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="fullsubtract" property="fullsubtract" jdbcType="DECIMAL" />
+    <result column="fulls" property="fulls" jdbcType="DECIMAL" />
+    <result column="fulldiscount" property="fulldiscount" jdbcType="DECIMAL" />
+    <result column="fulld" property="fulld" jdbcType="DECIMAL" />
+    <result column="outtime" property="outtime" jdbcType="TIMESTAMP" />
+    <result column="use" property="use" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="day" property="day" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="integral" property="integral" jdbcType="DECIMAL" />
+    <result column="pea" property="pea" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, subtract, discount, fullsubtract, fulls, fulldiscount, fulld, outtime, 
+    `use`, status, day, money, integral, pea
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from coupon
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from coupon
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.azkj.noopsyche.entity.Coupon" >
+    insert into coupon (id, type, subtract, 
+      discount, fullsubtract, fulls,
+      fulldiscount, fulld, outtime,
+      `use`, status, day, money,
+      integral, pea)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{subtract,jdbcType=DECIMAL}, 
+      #{discount,jdbcType=DECIMAL}, #{fullsubtract,jdbcType=DECIMAL}, #{fulls,jdbcType=DECIMAL}, 
+      #{fulldiscount,jdbcType=DECIMAL}, #{fulld,jdbcType=DECIMAL}, #{outtime,jdbcType=TIMESTAMP}, 
+      #{use,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{day,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, 
+      #{integral,jdbcType=DECIMAL}, #{pea,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.azkj.noopsyche.entity.Coupon" >
+    insert into coupon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="subtract != null" >
+        subtract,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="fullsubtract != null" >
+        fullsubtract,
+      </if>
+      <if test="fulls != null" >
+        fulls,
+      </if>
+      <if test="fulldiscount != null" >
+        fulldiscount,
+      </if>
+      <if test="fulld != null" >
+        fulld,
+      </if>
+      <if test="outtime != null" >
+        outtime,
+      </if>
+      <if test="use != null" >
+        `use`,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="day != null" >
+        day,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="integral != null" >
+        integral,
+      </if>
+      <if test="pea != null" >
+        pea,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="subtract != null" >
+        #{subtract,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="fullsubtract != null" >
+        #{fullsubtract,jdbcType=DECIMAL},
+      </if>
+      <if test="fulls != null" >
+        #{fulls,jdbcType=DECIMAL},
+      </if>
+      <if test="fulldiscount != null" >
+        #{fulldiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="fulld != null" >
+        #{fulld,jdbcType=DECIMAL},
+      </if>
+      <if test="outtime != null" >
+        #{outtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="use != null" >
+        #{use,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="day != null" >
+        #{day,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="integral != null" >
+        #{integral,jdbcType=DECIMAL},
+      </if>
+      <if test="pea != null" >
+        #{pea,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.azkj.noopsyche.entity.Coupon" >
+    update coupon
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="subtract != null" >
+        subtract = #{subtract,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="fullsubtract != null" >
+        fullsubtract = #{fullsubtract,jdbcType=DECIMAL},
+      </if>
+      <if test="fulls != null" >
+        fulls = #{fulls,jdbcType=DECIMAL},
+      </if>
+      <if test="fulldiscount != null" >
+        fulldiscount = #{fulldiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="fulld != null" >
+        fulld = #{fulld,jdbcType=DECIMAL},
+      </if>
+      <if test="outtime != null" >
+        outtime = #{outtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="use != null" >
+        `use` = #{use,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="day != null" >
+        day = #{day,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="integral != null" >
+        integral = #{integral,jdbcType=DECIMAL},
+      </if>
+      <if test="pea != null" >
+        pea = #{pea,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.azkj.noopsyche.entity.Coupon" >
+    update coupon
+    set type = #{type,jdbcType=VARCHAR},
+      subtract = #{subtract,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      fullsubtract = #{fullsubtract,jdbcType=DECIMAL},
+      fulls = #{fulls,jdbcType=DECIMAL},
+      fulldiscount = #{fulldiscount,jdbcType=DECIMAL},
+      fulld = #{fulld,jdbcType=DECIMAL},
+      outtime = #{outtime,jdbcType=TIMESTAMP},
+      `use` = #{use,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      day = #{day,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      integral = #{integral,jdbcType=DECIMAL},
+      pea = #{pea,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

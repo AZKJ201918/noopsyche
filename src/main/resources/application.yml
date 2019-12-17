@@ -1,5 +1,5 @@
 server:
-  port: 888
+  port: 717
 
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
@@ -20,11 +20,8 @@ spring:
     #host: localhost
     password: azkj201918
     #password:
-  data:
-    solr:
-      host: http://106.14.195.35:8080/solr/sku
   transaction:
-      rollback-on-commit-failure: true
+    rollback-on-commit-failure: true
   servlet:
     multipart:
       #上传一个文件最大值  默认是1MB

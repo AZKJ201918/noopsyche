@@ -3,6 +3,7 @@ package com.azkj.noopsyche.dao;
 import com.azkj.noopsyche.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface OrdersMapper {
     int updateOrder(String orderId);
     @Update("update orders set status=4 where id=#{id}")
     int updateOrderToSign(Integer id);
+    @Select("select openid from wxuser where token=#{token}")
+    String selectOpenidByToken(String token);
 }
