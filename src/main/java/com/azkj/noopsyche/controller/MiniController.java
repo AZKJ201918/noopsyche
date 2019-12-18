@@ -125,10 +125,10 @@ public class MiniController {
     @ApiOperation(value = "测试",notes = "测试",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/testpay")
-    public ApiResult<Map<String,String>> test(String token,Long price) {
+    public ApiResult<Map<String,String>> test(String token,String price) {
         ApiResult<Map<String,String>> result=new ApiResult();
         try {
-            Map<String,String> map=miniService.testpay(token,price);
+            Map<String,String> map=miniService.testpay(token, Long.valueOf(price));
             result.setData(map);
             result.setMessage("测试");
         } catch (NoopsycheException e) {

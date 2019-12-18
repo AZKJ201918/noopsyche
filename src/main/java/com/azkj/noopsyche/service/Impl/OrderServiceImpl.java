@@ -147,7 +147,9 @@ public class OrderServiceImpl implements OrderService {
            s = JSONArray.toJSONString(list);
         }
         ordersMapper.insertSelective(orders);
-        userCouponMapper.deleteByPrimaryKey(userCouponId);//删除用户优惠劵信息
+        if (userCouponId!=null){
+            userCouponMapper.updateStatus(userCouponId);//删除用户优惠劵信息
+        }
         smsProcessor.sendSmsToQueue(destination,s);
         String openid=ordersMapper.selectOpenidByToken(token);
         BigDecimal v = finalPrice.multiply(new BigDecimal(100));
@@ -182,8 +184,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Orders findOneOrderDetail(String orderId, Integer id) {
+    public Orders findOneOrderDetail(String orderId, Integer id) throws NoopsycheException {
         Orders orders = ordersMapper.selectByPrimaryKey(id);
+        if (orders==null){
+            throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"没有订单信息");
+        }
+        Coupon coupon = couponMapper.selectByPrimaryKey(orders.getCouponid());
+        orders.setCoupon(coupon);
         List<OrderCommodity> orderCommodityList=orderCommodityMapper.selectByOrderId(orderId);
         List<Sku> skuList = new ArrayList<>();
         for (OrderCommodity orderCommodity:orderCommodityList){

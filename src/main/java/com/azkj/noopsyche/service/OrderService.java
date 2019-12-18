@@ -19,5 +19,5 @@ public interface OrderService {
 
     void modifyOrderToSign(Integer id);
 
-    Orders findOneOrderDetail(String orderId, Integer id);
+    Orders findOneOrderDetail(String orderId, Integer id) throws NoopsycheException;
 }

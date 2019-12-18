@@ -268,6 +268,11 @@ public class UserController {
             result = new ApiResult<>();
             userService.addNewCoupon(token,couponids);
             result.setMessage("领取新人优惠劵成功");
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
         } catch (Exception e) {
             e.printStackTrace();
             log.error("SQL statement error or that place is empty" + e);
@@ -302,12 +307,37 @@ public class UserController {
     @ApiImplicitParam
     @PostMapping("/getCoupon")
     public ApiResult getCoupon(@RequestBody List<UserCoupon> userCouponList){
-        ApiResult<Object> result = null;
+            ApiResult<Object> result = null;
         try {
             result = new ApiResult<>();
             userService.addCoupon(userCouponList);
             result.setMessage("兑换优惠劵成功");
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
         } catch (Exception e) {
+            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "兑换优惠劵回调，付款成功后回调",notes = "付款成功后回调",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/annocyCoupon")
+    public ApiResult Coupon(@RequestBody List<UserCoupon> userCouponList){
+        ApiResult<Object> result = null;
+        try {
+            result = new ApiResult<>();
+            userService.addAnnocyCoupon(userCouponList);
+            result.setMessage("兑换优惠劵成功");
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
+        }catch (Exception e) {
             e.printStackTrace();
             log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");

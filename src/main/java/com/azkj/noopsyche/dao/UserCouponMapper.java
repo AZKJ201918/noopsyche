@@ -2,6 +2,7 @@ package com.azkj.noopsyche.dao;
 
 import com.azkj.noopsyche.entity.UserCoupon;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 @Mapper
@@ -19,4 +20,6 @@ public interface UserCouponMapper {
     int updateByPrimaryKey(UserCoupon record);
 
     List<UserCoupon> selectByToken(String token);
+    @Update("update usercoupon set status=1 where id=#{userCouponId}")
+    int updateStatus(Integer userCouponId);
 }

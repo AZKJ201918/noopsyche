@@ -30,7 +30,6 @@ public class UserElementUtils {
         if(userService.SelectUserElement(token)==null){
             throw  new NoopsycheException(401,"请登录");
         }
-
         return true;
     }
 }
