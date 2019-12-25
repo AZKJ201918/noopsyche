@@ -43,4 +43,6 @@ public class Orders {
     private List<Sku> skuList;
 
     private Integer couponid;
+
+    private Coupon coupon;
 }

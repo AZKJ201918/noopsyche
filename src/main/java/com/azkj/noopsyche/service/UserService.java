@@ -35,11 +35,13 @@ public interface UserService {
 
     List<Coupon> findAllNewCoupon() throws NoopsycheException;
 
-    void addNewCoupon(String token, List<Integer> couponids) throws ParseException;
+    void addNewCoupon(String token, List<Integer> couponids) throws ParseException, NoopsycheException;
 
     List<Coupon> findAllCoupon() throws NoopsycheException;
 
-    void addCoupon(List<UserCoupon> userCouponList) throws NoopsycheException;
+    void addCoupon(List<UserCoupon> userCouponList) throws Exception;
 
     PageInfo<WxUser> findNext(String token, Integer page, Integer limit) throws NoopsycheException;
+
+    void addAnnocyCoupon(List<UserCoupon> userCouponList) throws NoopsycheException, ParseException;
 }

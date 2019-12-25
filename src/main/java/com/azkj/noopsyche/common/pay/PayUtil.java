@@ -46,7 +46,6 @@ public class PayUtil {
         stringMap.put("signType",jsonObject.getString("signType"));
         stringMap.put("paySign",jsonObject.getString("paySign"));
         return stringMap;
-
     }
 
 

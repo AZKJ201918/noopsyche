@@ -6,12 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class PriceUtil {
 
     public static BigDecimal countPrice(BigDecimal totalPrice, Coupon coupon){
         BigDecimal finalPrice = new BigDecimal("0.00");
-        if (coupon!=null){
+        if ((coupon!=null&&coupon.getUse()==1)&&(coupon.getOuttime()==null||coupon.getOuttime().getTime()>new Date().getTime())){
             String type = coupon.getType().trim();
             if (type.equals("subtract")){
                 finalPrice=totalPrice.subtract(coupon.getSubtract());
@@ -27,7 +28,7 @@ public class PriceUtil {
                 }
             }
             if (type.equals("fulldiscount")){
-                if (totalPrice.compareTo(coupon.getFulld())>=0){
+                if (totalPrice.compareTo(coupon.getFulld())>=0){//总价大于满折金额
                     finalPrice=totalPrice.multiply(coupon.getFulldiscount());
                 }else {
                     finalPrice=totalPrice;

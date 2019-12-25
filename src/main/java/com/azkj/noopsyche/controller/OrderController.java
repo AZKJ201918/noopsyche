@@ -150,7 +150,11 @@ public class OrderController {
         try {
             Orders order= orderService.findOneOrderDetail(orderId,id);
             result.setMessage("查看订单详情成功");
-        } catch (Exception e) {
+        } catch (NoopsycheException e) {
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
+        }catch (Exception e) {
             log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
