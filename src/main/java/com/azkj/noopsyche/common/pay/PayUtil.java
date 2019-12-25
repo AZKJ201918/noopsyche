@@ -21,7 +21,7 @@ public class PayUtil {
         //时间戳
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
         String sdfdate = simpleDateFormat.format(date);
-        Integer zprice= Math.toIntExact(price * 100);
+        Integer zprice= Math.toIntExact(price);
         String string = "pay_ver=100&pay_type=010&service_id=015&merchant_no="+Constants.WEIXING_STATUS_MCH_ID+"&terminal_id="+Constants.WEIXING_STATUS_TERMINAL+"&terminal_trace=" + terminal_trace +"&terminal_time=" + sdfdate + "&total_fee=" + zprice +"&access_token="+ Constants.token;
         Map<String,Object> map=new HashMap();
         map.put("pay_ver","100");
