@@ -28,4 +28,6 @@ public interface OrdersMapper {
     int updateOrderToSign(Integer id);
     @Select("select openid from wxuser where token=#{token}")
     String selectOpenidByToken(String token);
+    @Update("update orders set status=2 where orderid=#{orderId}")
+    int updateByOrderId(String orderId);
 }

@@ -19,5 +19,7 @@ public interface OrderService {
 
     void modifyOrderToSign(Integer id);
 
+    void notifyurl(String notityXml) throws Exception;
+
     Orders findOneOrderDetail(String orderId, Integer id) throws NoopsycheException;
 }

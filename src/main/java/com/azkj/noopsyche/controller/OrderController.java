@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.jms.Destination;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +43,7 @@ public class OrderController {
     @Autowired
     @Qualifier("userCouponServiceImpl")
     private UserCouponService userCouponService;
+
     @ApiOperation(value = "生成订单",notes = "生成订单",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/createOrderInLine")
@@ -183,5 +187,26 @@ public class OrderController {
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
         return result;
+    }
+    @ApiOperation(value = "订单回调",notes = "订单回调",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/annocy")
+    public Map purchaseMini(HttpServletRequest request, HttpServletResponse response) {
+        Map<String,String> map=new HashMap<>();
+        String inputLine = "";
+        String notityXml = "";
+        try {
+            while ((inputLine = request.getReader().readLine()) != null) {
+                notityXml += inputLine;
+            }
+            request.getReader().close();
+            orderService.notifyurl(notityXml);
+            map.put("return_code","01");
+            map.put("return_msg","回调成功");
+        } catch (Exception e) {
+            log.error("SQL statement error or that place is empty" + e);
+
+        }
+        return map;
     }
 }

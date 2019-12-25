@@ -5,7 +5,9 @@ import com.azkj.noopsyche.dao.PersonMapper;
 import com.azkj.noopsyche.entity.Person;
 import com.azkj.noopsyche.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PersonServiceImpl implements PersonService {
 
     @Autowired

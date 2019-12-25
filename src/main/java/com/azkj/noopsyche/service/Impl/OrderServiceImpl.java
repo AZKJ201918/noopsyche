@@ -1,6 +1,8 @@
 package com.azkj.noopsyche.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.jms.SmsProcessor;
@@ -9,10 +11,7 @@ import com.azkj.noopsyche.common.utils.DateUtil;
 import com.azkj.noopsyche.common.utils.PriceUtil;
 import com.azkj.noopsyche.common.utils.RedisUtil;
 import com.azkj.noopsyche.dao.*;
-import com.azkj.noopsyche.entity.Coupon;
-import com.azkj.noopsyche.entity.OrderCommodity;
-import com.azkj.noopsyche.entity.Orders;
-import com.azkj.noopsyche.entity.Sku;
+import com.azkj.noopsyche.entity.*;
 import com.azkj.noopsyche.service.OrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -45,6 +44,8 @@ public class OrderServiceImpl implements OrderService {
     private SmsProcessor smsProcessor;
     @Autowired
     private PayUtil payUtil;
+    @Autowired
+    private WxUserMapper wxUserMapper;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Map<String, String> addOrders(Map<String, Object> dataMap) throws Exception {
@@ -200,5 +201,22 @@ public class OrderServiceImpl implements OrderService {
         }
         orders.setSkuList(skuList);
         return orders;
+    }
+    @Override
+    public void notifyurl(String notityXml) throws Exception {
+        if(notityXml==null) {
+            throw new Exception();
+        }
+        JSONObject jsonObject= JSON.parseObject(notityXml);
+        if (!jsonObject.isEmpty()){
+            String orderId = jsonObject.getString("terminal_trace");
+            if(orderId!=null){
+                ordersMapper.updateByOrderId(orderId);
+                //wxUserMapper.updateConsumptionByUUID(token);
+            }
+        }else{
+            throw  new Exception();
+        }
+
     }
 }

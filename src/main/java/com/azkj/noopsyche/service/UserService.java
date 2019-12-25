@@ -44,4 +44,6 @@ public interface UserService {
     PageInfo<WxUser> findNext(String token, Integer page, Integer limit) throws NoopsycheException;
 
     void addAnnocyCoupon(List<UserCoupon> userCouponList) throws NoopsycheException, ParseException;
+
+
 }
