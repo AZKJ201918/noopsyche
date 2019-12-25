@@ -20,8 +20,10 @@ public interface AddressMapper {
     int updateByPrimaryKeySelective(Address record);
 
     int updateByPrimaryKey(Address record);
+
     @Select("select phone,name from address where status=0 and token=#{token}")
     Address selectStatusByToken(String token);
+
     @Update("update address set status=1 where status=0 and token=#{token}")
     int updateToFeiMoren(String token);
 

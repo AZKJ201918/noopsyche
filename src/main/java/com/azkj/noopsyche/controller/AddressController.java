@@ -24,6 +24,7 @@ public class AddressController {
     @Autowired
     @Qualifier("addressServiceImpl")
     private AddressService addressService;
+
     @ApiOperation(value = "新增地址", notes = "新增地址", httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/insertAddress")
