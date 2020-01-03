@@ -171,6 +171,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void modifyOrder(String orderId) {
+        //把库存加上去
+        List<OrderCommodity> orderCommodityList = orderCommodityMapper.selectByOrderId(orderId);
+        for (OrderCommodity orderCommodity:orderCommodityList){
+            Integer repertory = (Integer) redisUtil.getObject("repertory:" + orderCommodity.getSkuid());
+        }
         ordersMapper.updateOrder(orderId);
     }
 
@@ -212,7 +217,8 @@ public class OrderServiceImpl implements OrderService {
             String orderId = jsonObject.getString("terminal_trace");
             if(orderId!=null){
                 ordersMapper.updateByOrderId(orderId);
-                //wxUserMapper.updateConsumptionByUUID(token);
+                Orders orders=ordersMapper.selectTokenByOrderId(orderId);
+                wxUserMapper.updateConsumptionByToken(orders.getToken() ,orders.getFinalprice());
             }
         }else{
             throw  new Exception();

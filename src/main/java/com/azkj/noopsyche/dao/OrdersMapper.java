@@ -30,4 +30,6 @@ public interface OrdersMapper {
     String selectOpenidByToken(String token);
     @Update("update orders set status=2 where orderid=#{orderId}")
     int updateByOrderId(String orderId);
+    @Select("select finalprice,token from orders where orderid=#{orderId}")
+    Orders selectTokenByOrderId(String orderId);
 }

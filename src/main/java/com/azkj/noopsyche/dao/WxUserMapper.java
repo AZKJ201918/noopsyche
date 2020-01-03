@@ -48,4 +48,6 @@ public interface WxUserMapper {
     String selectToken(String uuid);
     @Select("select nickname,headimgurl from wxuser where uuid=#{token}")
     List<WxUser> selectNext(String token);
+    @Update("update wxuser set consumption=consumption+#{finalprice} where token=#{token}")
+    int updateConsumptionByToken(@Param("token") String token,@Param("finalprice") BigDecimal finalprice);
 }
