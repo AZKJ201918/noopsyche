@@ -3,9 +3,11 @@ package com.azkj.noopsyche.service.Impl;
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.utils.SearchUtils;
+import com.azkj.noopsyche.dao.AssembleMapper;
 import com.azkj.noopsyche.dao.CommodityMapper;
 import com.azkj.noopsyche.dao.ProductMapper;
 import com.azkj.noopsyche.dao.PropertyMapper;
+import com.azkj.noopsyche.entity.Assemble;
 import com.azkj.noopsyche.entity.Commodity;
 import com.azkj.noopsyche.entity.Property;
 import com.azkj.noopsyche.entity.Sku;
@@ -30,6 +32,9 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private AssembleMapper assembleMapper;
 
     @Autowired
     private SearchUtils searchUtils;
@@ -60,6 +65,8 @@ public class CommodityServiceImpl implements CommodityService {
                 }
         );
         commodity.setPropertyList(propertyList);
+        Assemble assemble=assembleMapper.selectAssembleBySpuid(id);
+        commodity.setAssemble(assemble);
         return commodity;
     }
 

@@ -76,6 +76,14 @@ public class DateUtil {
         return isLeapYear(cal.get(Calendar.YEAR));
     }
 
+    public static Date plusHour(int hour){
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR,hour);
+        return calendar.getTime();
+    }
+
     /**
      * 判断是否是润年
      *
