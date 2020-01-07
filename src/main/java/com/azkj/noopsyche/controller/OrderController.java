@@ -2,6 +2,7 @@ package com.azkj.noopsyche.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.azkj.noopsyche.common.constants.Constants;
+import com.azkj.noopsyche.common.enm.UserToken;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.jms.SmsProcessor;
 import com.azkj.noopsyche.common.resp.ApiResult;
@@ -69,13 +70,13 @@ public class OrderController {
     @ApiOperation(value = "查看所有订单",notes = "查看订单",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/loadOrder")
-    public ApiResult<PageInfo<Orders>> loadOrder(Integer page,Integer limit,@RequestBody Orders orders){
+    public ApiResult<PageInfo<Orders>> loadOrder(Integer page, Integer limit, @UserToken String token, Integer status){
         ApiResult<PageInfo<Orders>> result = new ApiResult<>();
         /*Destination destination = new ActiveMQQueue("aaa");
         String s = JSON.toJSONString(dataMap);
         smsProcessor.sendSmsToQueue(destination,s);*/
         try {
-            PageInfo<Orders> pageInfo = orderService.findAllOrder(page, limit,orders);
+            PageInfo<Orders> pageInfo = orderService.findAllOrder(page, limit,token,status);
             result.setMessage("查看订单成功");
             result.setData(pageInfo);
         } catch (NoopsycheException e) {
@@ -205,7 +206,6 @@ public class OrderController {
             map.put("return_msg","回调成功");
         } catch (Exception e) {
             log.error("SQL statement error or that place is empty" + e);
-
         }
         return map;
     }
