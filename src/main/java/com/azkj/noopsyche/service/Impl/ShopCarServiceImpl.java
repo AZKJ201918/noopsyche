@@ -3,8 +3,10 @@ package com.azkj.noopsyche.service.Impl;
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.utils.RedisUtil;
+import com.azkj.noopsyche.dao.CommodityMapper;
 import com.azkj.noopsyche.dao.ShopCarMapper;
 import com.azkj.noopsyche.dao.SkuMapper;
+import com.azkj.noopsyche.entity.Commodity;
 import com.azkj.noopsyche.entity.ShopCar;
 import com.azkj.noopsyche.entity.Sku;
 import com.azkj.noopsyche.service.ShopCarService;
@@ -24,6 +26,8 @@ public class ShopCarServiceImpl implements ShopCarService{
     private ShopCarMapper shopCarMapper;
     @Autowired
     private SkuMapper skuMapper;
+    @Autowired
+    private CommodityMapper commodityMapper;
     @Override
     public void addShopCar(String token,String skuid,Integer num) throws NoopsycheException {
         Integer repertory = (Integer) redisUtil.getObject("repertory:" + skuid);
@@ -97,8 +101,10 @@ public class ShopCarServiceImpl implements ShopCarService{
         ArrayList<Sku> skuList = new ArrayList<>();
         for (String id:set){
             Sku sku = skuMapper.selectByPrimaryKey(Integer.parseInt(id));
+            Commodity commodity = commodityMapper.selectByPrimaryKey(sku.getSpuid());
             Integer carNum = (Integer) map.get(id);
             sku.setCarNum(carNum);
+            sku.setCommodity(commodity);
             skuList.add(sku);
         }
         return skuList;

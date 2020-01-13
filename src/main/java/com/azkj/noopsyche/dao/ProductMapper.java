@@ -20,6 +20,6 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
 
-    @Select("SELECT spuname FROM product WHERE propertyid=#{id} AND status=1")
+    @Select("SELECT id,spuname FROM product WHERE propertyid=#{id} AND status=1")
     List<Product> selectByProductAll(Integer id);
 }

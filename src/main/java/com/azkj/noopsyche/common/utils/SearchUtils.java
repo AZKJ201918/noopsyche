@@ -25,17 +25,15 @@ public class SearchUtils {
     private RedisUtil redisUtil;
 
 
-    public Sku SearchSku(String skuname) throws IOException {
+    public Sku SearchSku(String search) throws IOException {
         Sku sku=new Sku();
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.query(
-                QueryBuilders.boolQuery().must(
-                        QueryBuilders.matchQuery("skuname",skuname)
-                )
+                QueryBuilders.matchPhrasePrefixQuery("search",search)
         );
-        Search search=new Search.Builder(searchSourceBuilder.toString())
+        Search searchs=new Search.Builder(searchSourceBuilder.toString())
 				.addIndex("sku").addType("doc").build();
-        SearchResult result=jestHttpClient.execute(search);
+        SearchResult result=jestHttpClient.execute(searchs);
 		String array= JSON.parseObject(result.getJsonString())
 				.getJSONObject("hits")
 				.getJSONArray("hits")
