@@ -38,9 +38,9 @@ public class Commodity {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GTM+8")
     private Date updatetime;
 
-
-
     private List<Property> propertyList;
 
     private Assemble assemble;
+
+    private String bannerurl;
 }

@@ -12,5 +12,5 @@ public interface CommodityService {
 
     Commodity findAllCommodityDetail(Integer id) throws NoopsycheException;
 
-    Sku searchCommodity(String skuname) throws NoopsycheException, IOException;
+    Sku searchCommodity(String search) throws NoopsycheException, IOException;
 }

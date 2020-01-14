@@ -43,7 +43,7 @@ public class CommodityServiceImpl implements CommodityService {
     public PageInfo<Commodity> findAllCommodity(Integer page, Integer limit, Integer flag) throws NoopsycheException {
         PageHelper.startPage(page,limit);
         List<Commodity> commodityList = commodityMapper.selectAllCommodity(flag);
-        if (commodityList==null){
+        if (commodityList==null||commodityList.size()==0){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"没有商品信息");
         }
         PageInfo<Commodity> pageInfo = new PageInfo<>(commodityList);
@@ -71,7 +71,7 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
-    public Sku searchCommodity(String skuname) throws NoopsycheException, IOException {
-        return searchUtils.SearchSku(skuname);
+    public Sku searchCommodity(String search) throws NoopsycheException, IOException {
+        return searchUtils.SearchSku(search);
     }
 }

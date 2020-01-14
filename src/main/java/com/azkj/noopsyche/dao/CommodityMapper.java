@@ -2,6 +2,7 @@ package com.azkj.noopsyche.dao;
 
 import com.azkj.noopsyche.entity.Commodity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 @Mapper
@@ -18,5 +19,5 @@ public interface CommodityMapper {
 
     int updateByPrimaryKey(Commodity record);
 
-    List<Commodity> selectAllCommodity(Integer flag);
+    List<Commodity> selectAllCommodity(@Param("flag")Integer flag);
 }
