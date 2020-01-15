@@ -28,8 +28,8 @@ public class PuzzleServiceImpl implements PuzzleService {
     private WxUserMapper wxUserMapper;
 
     @Override
-    public void addPuzzle(String token, Integer spuid) throws NoopsycheException, ParseException {
-         Assemble assemble=assembleMapper.selectAssembleBySpuid(spuid);
+    public void addPuzzle(String token, Integer assembleId) throws NoopsycheException, ParseException {
+         Assemble assemble=assembleMapper.selectByPrimaryKey(assembleId);
          if (assemble==null){
              throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"此商品不参与拼团");
          }
@@ -37,7 +37,7 @@ public class PuzzleServiceImpl implements PuzzleService {
         groups.setStarttime(new Date());
         groups.setEndtime(DateUtil.plusDay2(1));
         groups.setOuttime(DateUtil.plusHour(36));
-        groups.setSpuid(spuid);
+        groups.setSpuid(assemble.getSpuid());
         groups.setAid(assemble.getId());
         groupsMapper.insertSelective(groups);
         People people=new People();
@@ -98,9 +98,9 @@ public class PuzzleServiceImpl implements PuzzleService {
         if (groups==null||groups.size()==0){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"暂无拼团信息");
         }
-        Assemble assemble = assembleMapper.selectAssembleBySpuid(spuid);
         for (Groups group:groups){
             List<People> peopleList = peopleMapper.selectPeopleByGid(group.getId());
+            Assemble assemble = assembleMapper.selectByPrimaryKey(group.getAid());
             for (People people:peopleList){
                 WxUser wxUser = wxUserMapper.selectNicknameAndImgByToken(people.getToken());
                 people.setWxUser(wxUser);
@@ -115,7 +115,7 @@ public class PuzzleServiceImpl implements PuzzleService {
     @Override
     public Groups findPuzzleByGid(Integer gid) {
         Groups groups = groupsMapper.selectByPrimaryKey(gid);
-        Assemble assemble = assembleMapper.selectAssembleBySpuid(groups.getSpuid());
+        Assemble assemble= assembleMapper.selectByPrimaryKey(groups.getAid());
         List<People> peopleList = peopleMapper.selectPeopleByGid(gid);
         for (People people:peopleList){
             WxUser wxUser = wxUserMapper.selectNicknameAndImgByToken(people.getToken());
@@ -123,5 +123,14 @@ public class PuzzleServiceImpl implements PuzzleService {
         }
         groups.setNum(assemble.getSize()-peopleList.size());
         return groups;
+    }
+
+    @Override
+    public List<Assemble> findAssembleBySpuid(Integer spuid) throws NoopsycheException {
+        List<Assemble> assembleList = assembleMapper.selectAssembleBySpuid(spuid);
+        if (assembleList==null||assembleList.size()==0){
+            throw new NoopsycheException("没有该商品拼团信息");
+        }
+        return assembleList;
     }
 }

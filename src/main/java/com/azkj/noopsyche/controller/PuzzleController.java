@@ -3,6 +3,7 @@ package com.azkj.noopsyche.controller;
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.resp.ApiResult;
+import com.azkj.noopsyche.entity.Assemble;
 import com.azkj.noopsyche.entity.Groups;
 import com.azkj.noopsyche.entity.People;
 import com.azkj.noopsyche.service.PuzzleService;
@@ -31,10 +32,10 @@ public class PuzzleController {
     @ApiOperation(value = "创建拼团",notes = "创建拼团",httpMethod = "POST")
     @ApiImplicitParam//已测试
     @PostMapping("/createPuzzle")
-    public ApiResult createPuzzle(String token,Integer spuid){
+    public ApiResult createPuzzle(String token,Integer assembleId){
         ApiResult<Object> result = new ApiResult<>();
         try {
-            puzzleService.addPuzzle(token,spuid);
+            puzzleService.addPuzzle(token,assembleId);
             result.setMessage("创建拼团成功");
         } catch (NoopsycheException e) {
             result.setMessage(e.getMessage());
@@ -46,6 +47,27 @@ public class PuzzleController {
         }
         return result;
     }
+    @ApiOperation(value = "查看某个商品的拼团信息",notes = "查看某个商品的拼团信息",httpMethod = "POST")
+    @ApiImplicitParam//已测试
+    @PostMapping("/loadAssemble")
+    public ApiResult<List<Assemble>> loadAssemble(Integer spuid){
+        ApiResult<List<Assemble>> result = new ApiResult<>();
+        try {
+            List<Assemble> assembleList=puzzleService.findAssembleBySpuid(spuid);
+            result.setMessage("查看某个商品的拼团信息成功");
+            result.setData(assembleList);
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
+        }catch (Exception e) {
+            log.error("SQL statement error or that place is empty"+e);
+            e.printStackTrace();
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
     @ApiOperation(value = "加入拼团",notes = "加入拼团",httpMethod = "POST")
     @ApiImplicitParam/*(name = "gid，uid",required = true,dataType = "INT")*/
     @PostMapping("joinGroup")
@@ -53,7 +75,7 @@ public class PuzzleController {
         ApiResult result=new ApiResult();
         try {//已测试
             puzzleService.JoinGroup(gid,token);
-            result.setMessage("加入成功");
+            result.setMessage("加入拼团成功");
         }catch (NoopsycheException e){
             result.setCode(e.getStatusCode());
             result.setMessage(e.getMessage());
@@ -86,8 +108,8 @@ public class PuzzleController {
     @ApiOperation(value = "查看某个商品的拼团",notes = "查看某个商品的拼团",httpMethod = "POST")
     @ApiImplicitParam/*(name = "spuid",required = true,dataType = "INT")*/
     @PostMapping("selectGroup")
-    public ApiResult selGroup(Integer spuid,Integer page,Integer limit){
-        ApiResult<Object> result = new ApiResult<>();
+    public ApiResult<PageInfo<Groups>> selGroup(Integer spuid,Integer page,Integer limit){
+        ApiResult<PageInfo<Groups>> result = new ApiResult<>();
         try {
             PageInfo<Groups> group = puzzleService.findSpuGroup(spuid, page, limit);
             result.setMessage("查看拼团成功");

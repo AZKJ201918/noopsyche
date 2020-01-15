@@ -270,7 +270,6 @@ public class UserController {
             result.setMessage("领取新人优惠劵成功");
         } catch (NoopsycheException e) {
             e.printStackTrace();
-            log.error("SQL statement error or that place is empty" + e);
             result.setMessage(e.getMessage());
             result.setCode(e.getStatusCode());
         } catch (Exception e) {

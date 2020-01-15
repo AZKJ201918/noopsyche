@@ -21,7 +21,7 @@ public interface OrdersMapper {
 
     int updateByPrimaryKey(Orders record);
 
-    List<Orders> selectOrderByToken(Orders orders);
+    List<Orders> selectOrderByToken(@Param("token") String token,@Param("status") Integer status);
     @Update("update orders set status=0 where orderid=#{orderId}")
     int updateOrder(String orderId);
     @Update("update orders set status=4 where id=#{id}")
@@ -32,4 +32,6 @@ public interface OrdersMapper {
     int updateByOrderId(String orderId);
     @Select("select finalprice,token from orders where orderid=#{orderId}")
     Orders selectTokenByOrderId(String orderId);
+    @Update("update orders set status=3 where orderid=#{orderId}")
+    int updateStatus(String orderId);
 }

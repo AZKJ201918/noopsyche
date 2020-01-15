@@ -37,8 +37,8 @@ public class PersonController {
     }
     @ApiOperation(value = "查看个人页面",notes = "查看个人页面",httpMethod = "GET")
     @ApiImplicitParam
-    @GetMapping("/loadMyViem")
-    public ApiResult loadMyViem(){
+    @GetMapping("/loadMyView")
+    public ApiResult loadMyView(){
         ApiResult<Person> result = new ApiResult<>();
         try {
             Person person=personService.findMyView();

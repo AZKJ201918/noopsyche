@@ -43,6 +43,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private SmsProcessor smsProcessor;
     @Autowired
+    private GroupsMapper groupsMapper;
+    @Autowired
     private PayUtil payUtil;
     @Autowired
     private WxUserMapper wxUserMapper;
@@ -50,13 +52,14 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = Exception.class)
     public Map<String, String> addOrders(Map<String, Object> dataMap) throws Exception {
         String token= (String) dataMap.get("token");
-        String skuId= (String) dataMap.get("skuId");
-        List<String> skuIds= (List<String>) dataMap.get("skuIds");
+        Integer skuId= (Integer) dataMap.get("skuId");
+        List<Integer> skuIds= (List<Integer>) dataMap.get("skuIds");
         Integer addressId= (Integer) dataMap.get("addressId");
         Integer number= (Integer) dataMap.get("number");
         Integer couponId = (Integer) dataMap.get("couponId");
         Integer userCouponId = (Integer) dataMap.get("userCouponId");//记得把用户的优惠劵主键传过来
         String remark= (String) dataMap.get("remark");
+        Integer gid = (Integer) dataMap.get("gid");//拼团的团号
         String orderId = DateUtil.getOrderIdByTime();
         Orders orders = new Orders();
         orders.setAddressid(addressId);
@@ -72,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
         Destination destination = new ActiveMQQueue("aaa");//通过消息队列扣除库存
         if (skuId!=null&&number!=null){//单个商品生成订单
             Integer repertory = (Integer) redisUtil.getObject("repertory:" + skuId);
-            Sku  sku = shopCarMapper.selectSkuWithPriceBySkuid(skuId);
+            Sku  sku = shopCarMapper.selectSkuWithPriceBySkuid(String.valueOf(skuId));
             if (repertory==null){
                 repertory=sku.getRepertory()==null?0:sku.getRepertory();
             }
@@ -91,11 +94,14 @@ public class OrderServiceImpl implements OrderService {
             BigDecimal totalPrice= skuprice.multiply(number1);
             Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
             finalPrice = PriceUtil.countPrice(totalPrice, coupon);
+            if (gid!=null){
+
+            }
             orders.setPrice(totalPrice);
             orders.setFinalprice(finalPrice);
             OrderCommodity orderCommodity = new OrderCommodity();
             orderCommodity.setOrderid(orderId);
-            orderCommodity.setSkuid(Integer.parseInt(skuId));
+            orderCommodity.setSkuid(skuId);
             orderCommodity.setNum(number);
             orderCommodityMapper.insertSelective(orderCommodity);
             s="[{\"skuId\":"+skuId+",\"num\":"+number+"}]";
@@ -103,13 +109,13 @@ public class OrderServiceImpl implements OrderService {
         if (skuIds!=null){//购物车生成订单
            BigDecimal totalPrice=new BigDecimal("0");
            BigDecimal skuprice=null;
-           for (String skuid:skuIds){
-               Integer carNum = (Integer) redisUtil.getHashObjectLong("shopCar:" + token, skuid);
+           for (Integer skuid:skuIds){
+               Integer carNum = (Integer) redisUtil.getHashObjectLong("shopCar:" + token, String.valueOf(skuid));
                Integer repertory = (Integer) redisUtil.getObject("repertory:" + skuid);
                if (carNum==null){
                    throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"skuid为"+skuid+"的商品购物车不存在");
                }
-               Sku sku = shopCarMapper.selectSkuWithPriceBySkuid(skuid);
+               Sku sku = shopCarMapper.selectSkuWithPriceBySkuid(String.valueOf(skuid));
                if (repertory==null){
                    repertory=sku.getRepertory()==null?0:sku.getRepertory();
                }
@@ -122,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
                }
                OrderCommodity orderCommodity = new OrderCommodity();
                orderCommodity.setOrderid(orderId);
-               orderCommodity.setSkuid(Integer.parseInt(skuid));
+               orderCommodity.setSkuid(skuid);
                orderCommodity.setNum(carNum);
                orderCommodityMapper.insertSelective(orderCommodity);
                skuprice= sku.getSkuprice();
@@ -135,13 +141,13 @@ public class OrderServiceImpl implements OrderService {
            orders.setFinalprice(finalPrice);
            HashMap<String,Object> map =null;
            ArrayList<Object> list = new ArrayList<>();
-           for (String skuid:skuIds){
+           for (Integer skuid:skuIds){
               map= new HashMap<>();
-              Integer carNum = (Integer) redisUtil.getHashObjectLong("shopCar:" + token, skuid);
+              Integer carNum = (Integer) redisUtil.getHashObjectLong("shopCar:" + token, String.valueOf(skuid));
               if (carNum==null){
                   continue;
               }
-              map.put("skuId",Integer.parseInt(skuid));
+              map.put("skuId",skuid);
               map.put("num",carNum);
               list.add(map);
            }
@@ -154,14 +160,14 @@ public class OrderServiceImpl implements OrderService {
         smsProcessor.sendSmsToQueue(destination,s);
         String openid=ordersMapper.selectOpenidByToken(token);
         BigDecimal v = finalPrice.multiply(new BigDecimal(100));
-        stringMap=payUtil.pay(openid,"",v.longValue(),orderId);
+        stringMap=payUtil.pay(openid,"",1000L,orderId);
         return stringMap;
     }
 
     @Override
-    public PageInfo<Orders> findAllOrder(Integer page, Integer limit, Orders orders) throws NoopsycheException {
+    public PageInfo<Orders> findAllOrder(Integer page, Integer limit,String token,Integer status) throws NoopsycheException {
         PageHelper.startPage(page,limit);
-        List<Orders> ordersList=ordersMapper.selectOrderByToken(orders);
+        List<Orders> ordersList=ordersMapper.selectOrderByToken(token,status);
         if (ordersList==null){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"未找到订单相关的信息");
         }

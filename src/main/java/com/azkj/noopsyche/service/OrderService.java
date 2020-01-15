@@ -11,7 +11,7 @@ public interface OrderService {
 
     Map<String, String> addOrders(Map<String, Object> dataMap) throws Exception;
 
-    PageInfo<Orders> findAllOrder(Integer page, Integer limit, Orders orders) throws NoopsycheException;
+    PageInfo<Orders> findAllOrder(Integer page, Integer limit, String token,Integer status) throws NoopsycheException;
 
     void modifyOrder(String orderId);
 
