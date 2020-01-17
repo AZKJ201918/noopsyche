@@ -1,6 +1,8 @@
 package com.azkj.noopsyche.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.jms.SmsProcessor;
@@ -146,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
               if (carNum==null){
                   continue;
               }
-              map.put("skuId",Integer.parseInt(skuid));
+              map.put("skuId",skuid);
               map.put("num",carNum);
               list.add(map);
            }
