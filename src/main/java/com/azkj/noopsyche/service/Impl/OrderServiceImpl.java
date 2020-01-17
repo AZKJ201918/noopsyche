@@ -27,24 +27,34 @@ import java.util.*;
 
 @Service("orderServiceImpl")
 public class OrderServiceImpl implements OrderService {
+
     @Autowired
     private RedisUtil redisUtil;
+
     @Autowired
     private ShopCarMapper shopCarMapper;
+
     @Autowired
     private OrdersMapper ordersMapper;
+
     @Autowired
     private OrderCommodityMapper orderCommodityMapper;
+
     @Autowired
     private SkuMapper skuMapper;
+
     @Autowired
     private CouponMapper couponMapper;
+
     @Autowired
     private UserCouponMapper userCouponMapper;
+
     @Autowired
     private SmsProcessor smsProcessor;
+
     @Autowired
     private PayUtil payUtil;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Map<String, String> addOrders(Map<String, Object> dataMap) throws Exception {

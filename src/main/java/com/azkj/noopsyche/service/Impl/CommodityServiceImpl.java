@@ -12,16 +12,14 @@ import com.azkj.noopsyche.entity.Sku;
 import com.azkj.noopsyche.service.CommodityService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import io.searchbox.client.http.JestHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommodityServiceImpl implements CommodityService {
+
     @Autowired
     private CommodityMapper commodityMapper;
 
@@ -33,6 +31,7 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Autowired
     private SearchUtils searchUtils;
+
 
     @Override
     public PageInfo<Commodity> findAllCommodity(Integer page, Integer limit, Integer flag) throws NoopsycheException {

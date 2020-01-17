@@ -6,7 +6,6 @@ import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.utils.UserElementUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
