@@ -20,6 +20,9 @@ spring:
     #host: localhost
     password: azkj201918
     #password:
+  data:
+    mongodb:
+      uri: mongodb://106.14.195.35:27017/noopsyche
   transaction:
     rollback-on-commit-failure: true
   servlet:

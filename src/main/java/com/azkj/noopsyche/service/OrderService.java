@@ -11,13 +11,15 @@ public interface OrderService {
 
     Map<String, String> addOrders(Map<String, Object> dataMap) throws Exception;
 
-    PageInfo<Orders> findAllOrder(Integer page, Integer limit, Orders orders) throws NoopsycheException;
+    PageInfo<Orders> findAllOrder(Integer page, Integer limit, String token,Integer status) throws NoopsycheException;
 
     void modifyOrder(String orderId);
 
     void removeOrder(Integer id);
 
     void modifyOrderToSign(Integer id);
+
+    void notifyurl(String notityXml) throws Exception;
 
     Orders findOneOrderDetail(String orderId, Integer id) throws NoopsycheException;
 }

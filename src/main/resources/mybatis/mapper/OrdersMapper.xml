@@ -37,10 +37,11 @@
     select
     <include refid="Base_Column_List1" />
     from orders
-    where token= #{token,jdbcType=VARCHAR}
+    <where> token= #{token,jdbcType=VARCHAR}
     <if test="status!=null">
       and status=#{status}
     </if>
+    </where>
     order by createtime DESC
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

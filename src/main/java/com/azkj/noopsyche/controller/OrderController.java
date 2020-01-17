@@ -1,6 +1,7 @@
 package com.azkj.noopsyche.controller;
 
 import com.azkj.noopsyche.common.constants.Constants;
+import com.azkj.noopsyche.common.enm.UserToken;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.resp.ApiResult;
 import com.azkj.noopsyche.entity.Orders;
@@ -20,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.jms.Destination;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +39,7 @@ public class OrderController {
     @Autowired
     @Qualifier("userCouponServiceImpl")
     private UserCouponService userCouponService;
+
     @ApiOperation(value = "生成订单",notes = "生成订单",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/createOrderInLine")
@@ -57,10 +62,10 @@ public class OrderController {
     @ApiOperation(value = "查看所有订单",notes = "查看订单",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/loadOrder")
-    public ApiResult<PageInfo<Orders>> loadOrder(Integer page,Integer limit,@RequestBody Orders orders){
+    public ApiResult<PageInfo<Orders>> loadOrder(Integer page, Integer limit, @UserToken String token, Integer status){
         ApiResult<PageInfo<Orders>> result = new ApiResult<>();
         try {
-            PageInfo<Orders> pageInfo = orderService.findAllOrder(page, limit,orders);
+            PageInfo<Orders> pageInfo = orderService.findAllOrder(page, limit,token,status);
             result.setMessage("查看订单成功");
             result.setData(pageInfo);
         } catch (NoopsycheException e) {
@@ -157,5 +162,25 @@ public class OrderController {
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
         return result;
+    }
+    @ApiOperation(value = "订单回调",notes = "订单回调",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/annocy")
+    public Map purchaseMini(HttpServletRequest request, HttpServletResponse response) {
+        Map<String,String> map=new HashMap<>();
+        String inputLine = "";
+        String notityXml = "";
+        try {
+            while ((inputLine = request.getReader().readLine()) != null) {
+                notityXml += inputLine;
+            }
+            request.getReader().close();
+            orderService.notifyurl(notityXml);
+            map.put("return_code","01");
+            map.put("return_msg","回调成功");
+        } catch (Exception e) {
+            log.error("SQL statement error or that place is empty" + e);
+        }
+        return map;
     }
 }

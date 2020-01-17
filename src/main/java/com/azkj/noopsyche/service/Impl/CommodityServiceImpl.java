@@ -3,9 +3,11 @@ package com.azkj.noopsyche.service.Impl;
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.utils.SearchUtils;
+import com.azkj.noopsyche.dao.AssembleMapper;
 import com.azkj.noopsyche.dao.CommodityMapper;
 import com.azkj.noopsyche.dao.ProductMapper;
 import com.azkj.noopsyche.dao.PropertyMapper;
+import com.azkj.noopsyche.entity.Assemble;
 import com.azkj.noopsyche.entity.Commodity;
 import com.azkj.noopsyche.entity.Property;
 import com.azkj.noopsyche.entity.Sku;
@@ -30,6 +32,9 @@ public class CommodityServiceImpl implements CommodityService {
     private ProductMapper productMapper;
 
     @Autowired
+    private AssembleMapper assembleMapper;
+
+    @Autowired
     private SearchUtils searchUtils;
 
 
@@ -37,7 +42,7 @@ public class CommodityServiceImpl implements CommodityService {
     public PageInfo<Commodity> findAllCommodity(Integer page, Integer limit, Integer flag) throws NoopsycheException {
         PageHelper.startPage(page,limit);
         List<Commodity> commodityList = commodityMapper.selectAllCommodity(flag);
-        if (commodityList==null){
+        if (commodityList==null||commodityList.size()==0){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"没有商品信息");
         }
         PageInfo<Commodity> pageInfo = new PageInfo<>(commodityList);
@@ -59,11 +64,13 @@ public class CommodityServiceImpl implements CommodityService {
                 }
         );
         commodity.setPropertyList(propertyList);
+        Assemble assemble=assembleMapper.selectAssembleBySpuid(id);
+        commodity.setAssemble(assemble);
         return commodity;
     }
 
     @Override
-    public Sku searchCommodity(String skuname) throws NoopsycheException, IOException {
-        return searchUtils.SearchSku(skuname);
+    public Sku searchCommodity(String search) throws NoopsycheException, IOException {
+        return searchUtils.SearchSku(search);
     }
 }

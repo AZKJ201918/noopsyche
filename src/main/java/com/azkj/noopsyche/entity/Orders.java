@@ -45,4 +45,8 @@ public class Orders {
     private Integer couponid;
 
     private Coupon coupon;
+
+    private Integer page;
+
+    private Integer limit;
 }

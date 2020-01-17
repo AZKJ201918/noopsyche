@@ -26,6 +26,8 @@ public class Sku {
 
     private Integer isintegral;
 
+    private Commodity commodity;
+
     private Integer use;
 
     private Integer carNum;

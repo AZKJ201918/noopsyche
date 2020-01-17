@@ -71,10 +71,10 @@ public class CommodityController {
     @ApiOperation(value = "检索商品", notes = "检索商品", httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/searchCommodity")
-    public ApiResult searchCommodity(String skuname){
+    public ApiResult searchCommodity(String search){
         ApiResult<Sku> result = new ApiResult<>();
         try {
-            Sku sku= commodityService.searchCommodity(skuname);
+            Sku sku= commodityService.searchCommodity(search);
             result.setMessage("检索商品成功");
             result.setData(sku);
         } catch (NoopsycheException e) {
@@ -83,6 +83,7 @@ public class CommodityController {
             result.setCode(e.getStatusCode());
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
