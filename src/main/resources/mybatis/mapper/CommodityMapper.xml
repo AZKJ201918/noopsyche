@@ -23,6 +23,16 @@
     from commodity
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectCommodity" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="true">
+    select
+    <include refid="Base_Column_List" />
+    from commodity
+    <where>
+      <if test="flag!=null">
+         flag=#{flag}
+      </if>
+    </where>
+  </select>
   <select id="selectAllCommodity" resultMap="BaseResultMap">
     select
     id,title,subtitle,price,sales,url,status,type,flag
@@ -33,6 +43,23 @@
        and flag=#{flag}
       </if>
     </where>
+    <trim>
+      <if test="sort==1">
+        ORDER BY createtime DESC
+      </if>
+      <if test="sort==2">
+        ORDER BY createtime ASC
+      </if>
+      <if test="sort==3">
+        ORDER BY lowprice ASC
+      </if>
+      <if test="sort==4">
+        ORDER BY highprice DESC
+      </if>
+      <if test="sort==5">
+        ORDER BY sales DESC
+      </if>
+    </trim>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from commodity

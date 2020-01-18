@@ -54,8 +54,9 @@ public class OrderController {
         String s = JSON.toJSONString(dataMap);
         smsProcessor.sendSmsToQueue(destination,s);*/
         try {
-            orderService.addOrders(dataMap);
+            Map<String, String> stringMap = orderService.addOrders(dataMap);
             result.setMessage("订单新增成功");
+            result.setData(stringMap);
         } catch (NoopsycheException e) {
             e.printStackTrace();
             result.setMessage(e.getMessage());
@@ -206,6 +207,8 @@ public class OrderController {
             map.put("return_msg","回调成功");
         } catch (Exception e) {
             log.error("SQL statement error or that place is empty" + e);
+            map.put("return_code","01");
+            map.put("return_msg","后台服务器异常");
         }
         return map;
     }

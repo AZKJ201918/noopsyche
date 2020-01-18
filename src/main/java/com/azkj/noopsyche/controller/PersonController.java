@@ -30,6 +30,7 @@ public class PersonController {
             result.setMessage("新增页面成功");
         }catch (Exception e){
             e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
             result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }

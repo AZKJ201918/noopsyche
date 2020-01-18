@@ -21,7 +21,7 @@ public class NoopsycheApplication extends Throwable {
 		SpringApplication.run(NoopsycheApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public HttpMessageConverters fastJsonHttpMessageConverters() {
 		FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverterEx();
 		List<MediaType> fastMediaTypes = new ArrayList<MediaType>();
@@ -30,6 +30,6 @@ public class NoopsycheApplication extends Throwable {
 		HttpMessageConverter<?> converter = fastJsonHttpMessageConverter;
 		return new HttpMessageConverters(converter);
 	}
-
+*/
 
 }

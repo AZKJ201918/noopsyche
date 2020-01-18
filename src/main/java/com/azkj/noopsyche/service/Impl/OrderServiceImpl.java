@@ -168,7 +168,7 @@ public class OrderServiceImpl implements OrderService {
     public PageInfo<Orders> findAllOrder(Integer page, Integer limit,String token,Integer status) throws NoopsycheException {
         PageHelper.startPage(page,limit);
         List<Orders> ordersList=ordersMapper.selectOrderByToken(token,status);
-        if (ordersList==null){
+        if (ordersList==null||ordersList.size()==0){
             throw new NoopsycheException(Constants.RESP_STATUS_BADREQUEST,"未找到订单相关的信息");
         }
         PageInfo<Orders> pageInfo = new PageInfo<>(ordersList);

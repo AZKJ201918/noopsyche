@@ -4,6 +4,7 @@ import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.resp.ApiResult;
 import com.azkj.noopsyche.entity.Commodity;
+import com.azkj.noopsyche.entity.Flag;
 import com.azkj.noopsyche.entity.Sku;
 import com.azkj.noopsyche.service.CommodityService;
 import com.github.pagehelper.PageInfo;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Pattern;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -28,12 +31,33 @@ public class CommodityController {
     @ApiOperation(value = "查看商品", notes = "查看商品", httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/commodity")
-    public ApiResult commodity(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "8") Integer limit, Integer flag){
+    public ApiResult commodity(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "8") Integer limit, Integer flag,Integer sort){
         ApiResult<Object> result = new ApiResult<>();
         try {
-            PageInfo<Commodity> pageInfo = commodityService.findAllCommodity(page, limit, flag);
+            PageInfo<Commodity> pageInfo = commodityService.findAllCommodity(page, limit, flag, sort);
             result.setMessage("查看商品成功");
             result.setData(pageInfo);
+        } catch (NoopsycheException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(e.getStatusCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("SQL statement error or that place is empty" + e);
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看商品修改后", notes = "查看商品", httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/laodCommodity")
+    public ApiResult<List<Flag>> commodity(){
+        ApiResult<List<Flag>> result = new ApiResult<>();
+        try {
+            List<Flag> flagList=commodityService.findFlag();
+            result.setMessage("查看商品成功");
+            result.setData(flagList);
         } catch (NoopsycheException e) {
             e.printStackTrace();
             result.setMessage(e.getMessage());

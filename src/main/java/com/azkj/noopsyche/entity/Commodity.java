@@ -40,7 +40,7 @@ public class Commodity {
 
     private List<Property> propertyList;
 
-    private Assemble assemble;
+    private List<Assemble> assembleList;
 
     private String bannerurl;
 }
