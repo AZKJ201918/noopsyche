@@ -72,12 +72,12 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
-    public List<Commodity> findCommodity() throws NoopsycheException {
-        List<Commodity> commodityList = commodityMapper.selectCommodity();
+    public List<Commodity> findCommodity(Integer flag) throws NoopsycheException {
+        List<Commodity> commodityList = commodityMapper.selectCommodity(flag);
         if (commodityList==null||commodityList.size()==0){
             throw new NoopsycheException("没有商品信息");
         }
-        return commodityMapper.selectCommodity();
+        return commodityMapper.selectCommodity(flag);
     }
 
     @Override

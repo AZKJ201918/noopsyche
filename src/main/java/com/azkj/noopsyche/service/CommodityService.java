@@ -16,7 +16,7 @@ public interface CommodityService {
 
     Sku searchCommodity(String search) throws NoopsycheException, IOException;
 
-    List<Commodity> findCommodity() throws NoopsycheException;
+    List<Commodity> findCommodity(Integer flag) throws NoopsycheException;
 
     List<Flag> findFlag() throws NoopsycheException;
 }

@@ -52,7 +52,7 @@ public class CommodityController {
     @ApiOperation(value = "查看商品修改后", notes = "查看商品", httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/laodCommodity")
-    public ApiResult<List<Flag>> commodity(){
+    public ApiResult<List<Flag>> commodity(Integer flag){
         ApiResult<List<Flag>> result = new ApiResult<>();
         try {
             List<Flag> flagList=commodityService.findFlag();

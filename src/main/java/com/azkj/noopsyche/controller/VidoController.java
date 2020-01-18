@@ -48,7 +48,6 @@ public class VidoController {
         return result;
     }
 
-
     @ApiOperation(value = "兑换视频",notes = "兑换教程",httpMethod = "PUT")
     @ApiImplicitParam
     @PutMapping("/conversionvideo")
