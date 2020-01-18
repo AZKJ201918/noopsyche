@@ -21,8 +21,6 @@ public class DatunServiceImpl implements DatunService{
 
     private final static Integer CHECK_STATE_TRANSIT =3;//审核通过
 
-
-
     @Autowired
     private DatumMapper datumMapper;
 

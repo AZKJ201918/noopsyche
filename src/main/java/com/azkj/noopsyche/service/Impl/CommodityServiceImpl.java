@@ -13,12 +13,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.List;
 
 @Service
 public class CommodityServiceImpl implements CommodityService {
+
     @Autowired
     private CommodityMapper commodityMapper;
 
@@ -33,6 +33,7 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Autowired
     private SearchUtils searchUtils;
+
 
     @Override
     public PageInfo<Commodity> findAllCommodity(Integer page, Integer limit, Integer flag, Integer sort) throws NoopsycheException {

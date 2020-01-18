@@ -1,10 +1,8 @@
 package com.azkj.noopsyche.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.enm.UserToken;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
-import com.azkj.noopsyche.common.jms.SmsProcessor;
 import com.azkj.noopsyche.common.resp.ApiResult;
 import com.azkj.noopsyche.entity.Orders;
 import com.azkj.noopsyche.entity.UserCoupon;
@@ -15,7 +13,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,8 +34,6 @@ import java.util.Map;
 @Api(value = "订单模块")
 public class OrderController {
     @Autowired
-    private SmsProcessor smsProcessor;
-    @Autowired
     @Qualifier("orderServiceImpl")
     private OrderService orderService;
     @Autowired
@@ -50,9 +45,6 @@ public class OrderController {
     @PostMapping("/createOrderInLine")
     public ApiResult createOrderInLine(@RequestBody Map<String,Object> dataMap){
         ApiResult<Object> result = new ApiResult<>();
-        /*Destination destination = new ActiveMQQueue("aaa");
-        String s = JSON.toJSONString(dataMap);
-        smsProcessor.sendSmsToQueue(destination,s);*/
         try {
             Map<String, String> stringMap = orderService.addOrders(dataMap);
             result.setMessage("订单新增成功");
@@ -73,9 +65,6 @@ public class OrderController {
     @PostMapping("/loadOrder")
     public ApiResult<PageInfo<Orders>> loadOrder(Integer page, Integer limit, @UserToken String token, Integer status){
         ApiResult<PageInfo<Orders>> result = new ApiResult<>();
-        /*Destination destination = new ActiveMQQueue("aaa");
-        String s = JSON.toJSONString(dataMap);
-        smsProcessor.sendSmsToQueue(destination,s);*/
         try {
             PageInfo<Orders> pageInfo = orderService.findAllOrder(page, limit,token,status);
             result.setMessage("查看订单成功");
@@ -96,9 +85,6 @@ public class OrderController {
     @PostMapping("/modifyOrder")
     public ApiResult modifyOrder(String orderId){
         ApiResult<Object> result = new ApiResult<>();
-        /*Destination destination = new ActiveMQQueue("aaa");
-        String s = JSON.toJSONString(dataMap);
-        smsProcessor.sendSmsToQueue(destination,s);*/
         try {
             orderService.modifyOrder(orderId);
             result.setMessage("取消订单成功");
@@ -114,9 +100,6 @@ public class OrderController {
     @PostMapping("/deleteOrder")
     public ApiResult<Object> deleteOrder(Integer id){
         ApiResult<Object> result = new ApiResult<>();
-        /*Destination destination = new ActiveMQQueue("aaa");
-        String s = JSON.toJSONString(dataMap);
-        smsProcessor.sendSmsToQueue(destination,s);*/
         try {
             orderService.removeOrder(id);
             result.setMessage("删除订单成功");
@@ -132,9 +115,6 @@ public class OrderController {
     @PostMapping("/signOrder")
     public ApiResult<Object> signOrder(Integer id){
         ApiResult<Object> result = new ApiResult<>();
-        /*Destination destination = new ActiveMQQueue("aaa");
-        String s = JSON.toJSONString(dataMap);
-        smsProcessor.sendSmsToQueue(destination,s);*/
         try {
             orderService.modifyOrderToSign(id);
             result.setMessage("签收订单成功");
@@ -150,9 +130,6 @@ public class OrderController {
     @PostMapping("/loadOrderDetail")
     public ApiResult<PageInfo<Orders>> loadOrderDetail(String orderId,Integer id){
         ApiResult<PageInfo<Orders>> result = new ApiResult<>();
-        /*Destination destination = new ActiveMQQueue("aaa");
-        String s = JSON.toJSONString(dataMap);
-        smsProcessor.sendSmsToQueue(destination,s);*/
         try {
             Orders order= orderService.findOneOrderDetail(orderId,id);
             result.setMessage("查看订单详情成功");
@@ -172,9 +149,6 @@ public class OrderController {
     @PostMapping("/loadUserCoupon")
     public ApiResult loadUserCoupon(String token){
         ApiResult result = new ApiResult<>();
-        /*Destination destination = new ActiveMQQueue("aaa");
-        String s = JSON.toJSONString(dataMap);
-        smsProcessor.sendSmsToQueue(destination,s);*/
         try {
             List<UserCoupon> userCouponList= userCouponService.findAllCoupon(token);
             result.setMessage("查看未过期优惠券成功");

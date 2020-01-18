@@ -14,8 +14,10 @@ import java.util.List;
 
 @Service
 public class AddressServiceImpl implements AddressService {
+
     @Autowired
     private AddressMapper addressMapper;
+
     @Override
     public void addAddress(Address address) {
           Address myAddress=addressMapper.selectStatusByToken(address.getToken());

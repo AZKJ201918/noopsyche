@@ -11,7 +11,10 @@ import com.azkj.noopsyche.common.utils.DateUtil;
 import com.azkj.noopsyche.common.utils.PriceUtil;
 import com.azkj.noopsyche.common.utils.RedisUtil;
 import com.azkj.noopsyche.dao.*;
-import com.azkj.noopsyche.entity.*;
+import com.azkj.noopsyche.entity.Coupon;
+import com.azkj.noopsyche.entity.OrderCommodity;
+import com.azkj.noopsyche.entity.Orders;
+import com.azkj.noopsyche.entity.Sku;
 import com.azkj.noopsyche.service.OrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -42,8 +45,6 @@ public class OrderServiceImpl implements OrderService {
     private UserCouponMapper userCouponMapper;
     @Autowired
     private SmsProcessor smsProcessor;
-    @Autowired
-    private GroupsMapper groupsMapper;
     @Autowired
     private PayUtil payUtil;
     @Autowired

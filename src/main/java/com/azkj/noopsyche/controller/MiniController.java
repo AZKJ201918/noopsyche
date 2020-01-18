@@ -1,7 +1,6 @@
 package com.azkj.noopsyche.controller;
 
 
-
 import com.azkj.noopsyche.common.constants.Constants;
 import com.azkj.noopsyche.common.exception.NoopsycheException;
 import com.azkj.noopsyche.common.resp.ApiResult;
